@@ -190,7 +190,7 @@ def sub_df(data):
         return MicroblogText_df
 
 import pickle
-import nltk
+
 import gensim
 import gensim.corpora as corpora
 
