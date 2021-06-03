@@ -64,8 +64,152 @@ def load_new_data(df):
         
          return df
 #=============================================================================
+
+import datetime
+ 
+def avg_day(date_col):
+    time_series = pd.DataFrame(date_col.value_counts().reset_index())
+    time_series.columns = ['date', 'count']
+    time_series['tweetdate'] = time_series['date'].map(lambda x: x.date())
+    grp_date = time_series.groupby('tweetdate')
+    tweet_by_date = pd.DataFrame(grp_date.size(), columns=['num_'])
+    tweet_by_date_avg=tweet_by_date.num_.mean()
+
+    return tweet_by_date_avg  
+
+def sub_df(data):
+    hours_List=[]
+    min_List=[]
+    text_List=[]
+    location_List=[]
+    followers_List=[]
+    retweetcount_List=[]
+    listedcount_List=[]
+    source_List=[]
+    Length_List=[]
+
+    input_query=[]
+    iso_code=[]
+    userdescription=[]
+    user_Created=[]
+    Days_Active=[]
+    fav_Count=[]
+    verif=[]
+    user_Statuses=[]
+    has_Image=[]
+    ave_tweets_perday=[]
+    id=[]
+    
+    from collections import Counter
+
+    MyList_tweet = data['statuses_retweeted_status_id']
+    k=Counter(MyList_tweet)
+
+    D_Tweet_id=pd.DataFrame.from_dict(k, orient='index').reset_index()
+ 
+    D_Tweet_id.columns=["statuses_retweeted_status_id","value"]
+         
+    stts_Id_top=(D_Tweet_id[D_Tweet_id["statuses_retweeted_status_id"].notna()])
+         
+    stts_Id_top=D_Tweet_id["statuses_retweeted_status_id"].to_list()
+         
+    stts_Id_top=[x for x in stts_Id_top if str(x) != 'nan']
+
+    for i in stts_Id_top:
+        X=data.loc[data['statuses_retweeted_status_id']==i]
+        original_date= X.statuses_retweeted_status_created_at.min()
+        max_date=X.statuses_created_at.max()
+        diff=(X.statuses_created_at.max() - X.statuses_retweeted_status_created_at.min())
+        days=diff.days
+        seconds=diff.seconds
+        hours=(days * 24) + (seconds // 3600)
+        minutes = (seconds % 3600) // 60
+        hours_List.append(hours)
+        min_List.append(minutes)
+  
+        id_=i
+        id.append(id_)
+ 
+        text= X.statuses_retweeted_status_text.iloc[0]
+        text_List.append(text)
+ 
+        date_col=X['statuses_created_at']
+        ave_day=avg_day(date_col)
+        ave_tweets_perday.append(ave_day)
+     
+        Length=len(str(text))
+        Length_List.append(Length)
+     
+        hashtag=X.input_query.iloc[0]
+        input_query.append(hashtag)
+    
+        iso=X.statuses_metadata_iso_language_code.iloc[0]
+        iso_code.append(iso)
+   
+        user_description=X.statuses_retweeted_status_user_description.iloc[0]
+        userdescription.append(user_description)
+
+        userCreated=X.statuses_retweeted_status_user_created_at.iloc[0]
+        user_Created.append(userCreated)
+
+        diff_Created=(X.statuses_retweeted_status_created_at.max() - X.statuses_retweeted_status_user_created_at.min())
+        DaysActive=diff_Created.days
+        Days_Active.append(DaysActive)
+
+        favCount=X.statuses_retweeted_status_user_favourites_count.iloc[0]
+        fav_Count.append(favCount)
+ 
+        userStatuses=X.statuses_retweeted_status_user_statuses_count.iloc[0]
+        user_Statuses.append(userStatuses)
+
+        verified=X.statuses_retweeted_status_user_verified.iloc[0]
+        verif.append(verified)
+  
+        hasImage=X.statuses_retweeted_status_user_profile_use_background_image.iloc[0]
+        has_Image.append(hasImage)
+ 
+        location=X.statuses_retweeted_status_user_location.iloc[0]
+        location_List.append(location)
+ 
+        user_followers=X['statuses_retweeted_status_user_followers_count'].mean()
+        followers_List.append(user_followers)
+ 
+        retweet_count=X['statuses_retweet_count'].mean()
+        retweetcount_List.append(retweet_count)
+
+        og_listed_count=X['statuses_retweeted_status_user_listed_count'].mean()
+        listedcount_List.append(og_listed_count)
+
+        source=X.statuses_source.iloc[0]
+        source_List.append(source)
+
+        data_tuples = list(zip(text_List,input_query,hours_List,ave_tweets_perday,location_List,retweetcount_List,followers_List,listedcount_List,source_List,Length_List,iso_code,userdescription,user_Created,fav_Count,verif,user_Statuses,has_Image,Days_Active))
+
+        MicroblogText_df=pd.DataFrame(data_tuples, columns=['Status Text','input_query','Hours retweeted','ave_tweets_perday','Location of user','number of times retweeted','number of followers','number of times listed','source','Length','iso_code','user_description','userCreated','favCount','verified','userStatuses','hasImage','DaysActive'])
+
+        return MicroblogText_df
+
+import pickle
+import nltk
+import gensim
+import gensim.corpora as corpora
+
+from gensim.corpora import Dictionary
+from gensim.models import ldamodel
+from gensim.utils import simple_preprocess 
+from gensim.models import CoherenceModel
+
+pickle_in = open("Topic_classfier.pkl", "rb") 
+Topic_clf=pickle.load(pickle_in)
+
+def TP_prediction(doc,model=Topic_clf):
+    
+    new_text_corpus =  model.id2word.doc2bow(doc.split())
     
     
+    return model(new_text_corpus)
+    
+
 def main():
     
     # Title
@@ -76,15 +220,62 @@ def main():
     
     #Creating side bar to upload the file
     st.sidebar.subheader("Model and Visualization Headings")
-    Data_file=st.sidebar.file_uploader(label="Upload csv raw file", type=['xlsx'])
-    if Data_file is not None:
-
-        df=pd.read_excel(Data_file)
-        df=load_new_data(df)
-        st.write(df.info())
-        st.dataframe(df)
-  
+    menu=["","Bulk prediction","Single prediction"]
+    choice=st.sidebar.selectbox("Choose data load method", menu)
     
+    if choice== "Bulk prediction":
+        Data_file=st.sidebar.file_uploader(label="Upload csv raw file", type=['xlsx'])
+        
+        if st.button('Predict'):
+          data=pd.read_excel(Data_file)
+         
+          data= load_new_data(data)
+         
+          data=sub_df(data)
+
+          st.dataframe(data)
+          
+    if choice=="Single prediction":
+        st.sidebar.subheader("User Information:")
+        number_of_followers=st.sidebar.number_input("number of followers",min_value=0, max_value=10000000,step=1)
+        number_of_times_listed=st.sidebar.number_input("number of times listed",step=1)
+        fav_Count=st.sidebar.number_input("fav Count", step=1)
+        has_image=st.sidebar.number_input("has image (1-yes 0-No)",min_value=0,max_value=1, step=1)
+        has_decription=st.sidebar.number_input("has decription (1-yes 0-No)",min_value=0,max_value=1, step=1)
+        Date_user_created=st.sidebar.date_input("Date user created")
+        Microblog_text=st.sidebar.text_input("Microblog text")
+        
+        features={'number_of_followers': number_of_followers,
+            'number_of_times_listed': number_of_times_listed, 'fav_Count': fav_Count,
+            'has image': has_image, 'has_decription': has_decription,
+            'Date_user_created': Date_user_created, 'Microblog_text': Microblog_text
+            }
+        
+        data = pd.DataFrame([features])
+        
+        if st.button('Predict'):
+            
+            pred=TP_prediction(Microblog_text)
+        
+            st.write(pred)  
+        
+        
+# =============================================================================
+#      prediction = predict_quality(model, features_df)
+#      st.write(' Based on feature values, your wine quality is '+ str(prediction))
+#     
+#     if Data_file is not None:
+# 
+#         df=pd.read_excel(Data_file)
+#         data=load_new_data(df)
+#    
+#         st.dataframe(df)
+#         st.dataframe(data)
+#         
+#         subdf=sub_df(data=df)
+#         st.dataframe(subdf)
+# =============================================================================
+  
     
     
 if __name__=='__main__':
