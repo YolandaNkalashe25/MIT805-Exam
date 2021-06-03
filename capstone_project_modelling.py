@@ -191,15 +191,14 @@ def sub_df(data):
 
 import pickle
 
-# =============================================================================
-# import gensim
-# import gensim.corpora as corpora
-# 
-# from gensim.corpora import Dictionary
-# from gensim.models import ldamodel
-# from gensim.utils import simple_preprocess 
-# from gensim.models import CoherenceModel
-# =============================================================================
+
+import gensim
+import gensim.corpora as corpora
+
+from gensim.corpora import Dictionary
+from gensim.models import ldamodel
+from gensim.utils import simple_preprocess 
+from gensim.models import CoherenceModel
 
 pickle_in = open("Topic_classfier.pkl", "rb") 
 Topic_clf=pickle.load(pickle_in)
