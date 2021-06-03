@@ -191,23 +191,27 @@ def sub_df(data):
 
 import pickle
 
-import gensim
-import gensim.corpora as corpora
-
-from gensim.corpora import Dictionary
-from gensim.models import ldamodel
-from gensim.utils import simple_preprocess 
-from gensim.models import CoherenceModel
+# =============================================================================
+# import gensim
+# import gensim.corpora as corpora
+# 
+# from gensim.corpora import Dictionary
+# from gensim.models import ldamodel
+# from gensim.utils import simple_preprocess 
+# from gensim.models import CoherenceModel
+# =============================================================================
 
 pickle_in = open("Topic_classfier.pkl", "rb") 
 Topic_clf=pickle.load(pickle_in)
 
-def TP_prediction(doc,model=Topic_clf):
-    
-    new_text_corpus =  model.id2word.doc2bow(doc.split())
-    
-    
-    return model(new_text_corpus)
+# =============================================================================
+# def TP_prediction(doc,model=Topic_clf):
+#     
+#     new_text_corpus =  model.id2word.doc2bow(doc.split())
+#     
+#     
+#     return model(new_text_corpus)
+# =============================================================================
     
 
 def main():
@@ -255,9 +259,8 @@ def main():
         
         if st.button('Predict'):
             
-            pred=TP_prediction(Microblog_text)
         
-            st.write(pred)  
+            st.table(data)  
         
         
 # =============================================================================
