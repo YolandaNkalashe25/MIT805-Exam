@@ -974,11 +974,11 @@ class SubSet_Data:
                    st.subheader("Overall Sentiment:")
                    
                    
-                   if data['Sentiment_Cat'][0]=='0':
+                   if data['Sentiment'][0]=='Pos':
                         st.write("{} : {}".format("Positive Sentiment"+emoji.emojize(':grinning_face_with_big_eyes:') ,str(int(face_det[0]))+'%'))
-                   elif data['Sentiment_Cat'][0]=='1':    
+                   elif data['Sentiment'][0]=='Neg':    
                         st.write("{} : {}".format("Negative Sentiment"+emoji.emojize(':angry_face:') ,str(int(face_det[0]))+'%'))
-                   elif data['Sentiment_Cat'][0]=='0':    
+                   elif data['Sentiment_Cat'][0]=='neu':    
                         st.write("{} : {}".format("Nuetral Sentiment"+emoji.emojize(':neutral_face:') ,str(int(face_det[0]))+'%'))
           
     
