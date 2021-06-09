@@ -988,14 +988,12 @@ class SubSet_Data:
             
               if st.checkbox('Predict hourly rate of transmission'):
                   
-                  pred_cat=self.Trending_model.predict(sub_data_pred)
+                  pred_cat=pd.DataFrame(self.Trending_model.predict(sub_data_pred))
                   
                   st.write(pred_cat[0])
-# =============================================================================
-#                   pred_val=[]
-# 
-#                   if pred_cat==0:
-#                       val='Trending'
+
+#                  if pred_cat==0:
+#                       pred_val ='Trending'
 #                       pred_val.append(val)
 #                   else:
 #                       val='Wont Trending'
