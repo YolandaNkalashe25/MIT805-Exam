@@ -874,8 +874,7 @@ class SubSet_Data:
                   st.write(self.Trending_model.predict_proba(sub_data))
           
 def main():
-  
-  img = st.image('wordCloud2.png')
+    
   st.title("Covid19za Consortium")
   st.subheader("Analysis and Predictor Models for Covid19 Microblog data ")
   st.write("This app uses a microblog, twitter data to help identify communication straegy for health and government officials during pandemics in social platforms. The dataset used contains user, retweet and microblog content information. ")
