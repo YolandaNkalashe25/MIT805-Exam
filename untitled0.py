@@ -1004,13 +1004,13 @@ class SubSet_Data:
                   s_clf=pd.Series(cf_lvl.max(axis=0))
                   pred_cat=pd.DataFrame(pred_cat) 
  
-                  pred_cat=pd.DataFrame(data['Microblog_text'])
+                  pred_cat=pd.DataFrame(Microblog_text)
                   pred_cat['Confidence Level']=s_clf.max()
                   pred_cat['Projected Status']=pred_val                   
                     
                   st.write('Topic analysis/prediciton:')
                   st.write('Topology table')
-                  pred_Topic=self.Topic_m.predict(sub_data['Microblog_text'])
+                  pred_Topic=self.Topic_m.predict(Microblog_text)
                   topic_name=""
                   
 
@@ -1024,7 +1024,7 @@ class SubSet_Data:
 
                           
                   pred_Topic=pd.DataFrame(pred_Topic)
-                  pred_Topic['Microblog']=sub_data['Microblog_text']
+                  pred_Topic['Microblog']=Microblog_text
                   pred_Topic['Topic_Cat']=pred_Topic[0]
                   pred_Topic['Topic_Name']=topic_name
             
