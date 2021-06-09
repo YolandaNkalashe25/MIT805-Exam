@@ -1104,7 +1104,7 @@ class SubSet_Data:
                   
                   st.write(pred_Topic['Topic_Cat'][0])
     
-                  if pred_Topic['Topic_Cat'][0]==1:
+                  if pred_Topic['Topic_Cat'][0]=='1':
                        st.subheader("Topic1 Distrubtion plot")
                        st.altair_chart(line_chart1,use_container_width=True)
             
@@ -1112,7 +1112,7 @@ class SubSet_Data:
                        st.subheader("Topic2 Distrubtion plot")
                        st.altair_chart(line_chart2,use_container_width=True)
                 
-                  else :
+                  elif pred_Topic['Topic_Cat'][0]==3:
                        st.subheader("Topic3 Distrubtion plot")
                        st.altair_chart(line_chart3,use_container_width=True)    
                        
