@@ -988,18 +988,20 @@ class SubSet_Data:
             
               if st.checkbox('Predict hourly rate of transmission'):
                   
-                  pred_cat=pd.DataFrame(self.Trending_model.predict(sub_data_pred))
+                  pred_cat=self.Trending_model.predict(sub_data_pred)
                   
                   st.write(pred_cat[0])
+                  pred_val=""
 
-#                  if pred_cat==0:
-#                       pred_val ='Trending'
-#                       pred_val.append(val)
-#                   else:
-#                       val='Wont Trending'
-#                       pred_val.append(val)
-#                                        
-#                   cf_lvl=pd.DataFrame(self.Trending_model.predict_proba(sub_data_pred))
+                  if pred_cat==0:
+                       pred_val ='Trending'
+
+                  else:
+                       pred_val='Wont Trending'
+
+                                       
+                  cf_lvl=pd.DataFrame(self.Trending_model.predict_proba(sub_data_pred))
+                  st.write(cf_lvl)
 #                    
 #                   pred_cat['Pred category']=pred_cat
 #                   pred_cat_T=pd.DataFrame(data['Microblog_text'])
