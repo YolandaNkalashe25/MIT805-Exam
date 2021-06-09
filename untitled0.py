@@ -698,303 +698,87 @@ class SubSet_Data:
             choice=st.sidebar.selectbox("bulk/single prediction", menu)
             
           
-            if choice== "Bulk prediction":
-                Data_file=st.sidebar.file_uploader(label="Upload csv raw file", type=['xlsx'])
+            Data_file=st.sidebar.file_uploader(label="Upload csv raw file", type=['xlsx'])
+               
                 
-         
-          
-                if st.checkbox('Generate User & Content Based Feature Table'):
-     
-    
-                   st.header("User & Content Based Feature Table Modelling:")
-                   st.subheader("Sub-Table based on input data")
-          
+            if st.choice('Predict'):
                    data=pd.read_excel(Data_file)
 
                    sub_data=self.sub_df(data)
                    corpus=sub_data['Microblog_text']
-                   Tp=self.Topic_num(corpus)
-        
+                   Tp=Topic_num(corpus)
+                 
                    Senti=self.Sentiment_url(corpus)
-
+ 
                    sub_data['Sentiment']=Senti["sentiment"]
                    sub_data['Sentiment_Cat']=Senti["Sentiment_Cat"]
                    sub_data['No_Urls']=Senti["urls"]
                    sub_data['Topic']=pd.DataFrame(Tp, columns={'Topic'})
-          
+                 
                    sub_data_pred=sub_data[['number_of_followers','number_of_times_listed','Length','fav_Count','user_verified','status_Count','has_image','DaysActive','Sentiment_Cat','No_Urls','Topic','has_decription']]
-            
-          
-                   st.dataframe(sub_data_pred)
-          
-                   st.subheader('Overall Sentiment observed')
-            
+                   
                    sent=sub_data['Sentiment']
                    face_det=(sent.value_counts()/len(sent))*100
-            
-                   import emoji
                    
-                   st.write("{}: {} ".format("Positive "+emoji.emojize(':grinning_face_with_big_eyes:') ,str(int(face_det[0]))+'%'))
-                   st.write("{}: {} ".format("Neutral "+emoji.emojize(':neutral_face:') ,str(int(face_det[1]))+'%'))
-                   st.write("{}: {} ".format("Negative"+emoji.emojize(':angry_face:') ,str(int(face_det[2]))+'%'))
-                 
-            
-                if st.checkbox('Predict hourly rate of transmission '):
-                   pickle_in = open("Trending_classfier.pkl", "rb") 
-                   Trending_model=pickle.load(pickle_in)
-                    
+                   
+                   emo=[]
+                   for i in face_det:
+                       if i=="Pos":
+                           emoji_=emoji.emojize(':grinning_face_with_big_eyes:')
+                           emo.append(emoji_)
+                       elif i=="Neg":
+                           emoji_=emoji.emojize(':neutral_face:')
+                           emo.append(emoji_)
+                       else:
+                           emoji_=emoji.emojize(':angry_face:')
+                           emo.append(emoji_)
+                           
                    pred_cat=pd.DataFrame(Trending_model.predict(sub_data_pred))
                    pred_val=[]
-             
+                   
                    for i in pred_cat[0]:
                        if i==0:
-                        val='Trending'
-                        pred_val.append(val)
-                   else:
-                       val='Wont Trending'
-                       pred_val.append(val)
-                 
-
-             
+                           val='Trending'
+                           pred_val.append(val)
+                       else:
+                           val='Wont Trending'
+                           pred_val.append(val)
+                       
+ 
+                   
                    cf_lvl=pd.DataFrame(Trending_model.predict_proba(sub_data_pred))
-             
+                   
                    pred_cat['Pred category']=pred_cat[0]
                    pred_cat['Text']=sub_data['Microblog_text']
                    pred_cat['Projected Status']=pred_val
                    pred_cat['Confidence Level']=cf_lvl[0]
-            
-                   st.subheader('Topic analysis/prediciton:')
-            
-                   st.write('Topology table')
-                   pred_Topic=self.Topic_m.predict(sub_data['Microblog_text'])
-                   topic_name=[]
-             
-                   for i in pred_Topic:
-                     if i=='0':
-                      val='T_Vaccine'
-                      topic_name.append(val)
-                     elif i=='1':
-                      val='T_Covid19'
-                      topic_name.append(val)
-                     else:
-                      val='T_SA_lockdown'
-                      topic_name.append(val)
-             
-                   pred_Topic=pd.DataFrame(pred_Topic)
-                   pred_Topic['Microblog']=sub_data['Microblog_text']
-                   pred_Topic['Topic_Cat']=pred_Topic[0]
-                   pred_Topic['Topic_Name']=topic_name
-            
-                   pred_Topic=pred_Topic[['Microblog','Topic_Cat','Topic_Name']]
-            
-                   st.dataframe(pred_Topic)
-            
-            
-            
-                   lamda_T1=[27,3,11,10,19,0,5,18,2,6,7,6,18,2,4,27,13,7,2,5,6,1,6,6,9,14,2,6,4,3,3,8,4,
-                     3,4,4,2,1,10,3,1,1,1,1,1,3,2,8,2,2,4,1,1,9,3,2,2,3,2,2,1,1,2,5,5,7,8,3,13,
-                     8,4,1]
-                   lamda_T2=[0,1178,2,1,1,359,2,4,1,1,16,74,6,7,2,3,159,3,11,65,12,4,1,22,5,1,1,43,
-                      1,63,2,5,3,1,1,314,357,16,10,21,4,12,2,2,1,3,61,32,1,2,1,1,1,2,3,1,11,
-                      4,1,7,15,17,4,2,65,1,1,1,1,1,22,8]
-            
-                   lamda_T3=[3,3,0,1,3,3,1,1,1,1,1,1,4,1,1,1,6,2,1,1,1,4,1,3,1,1,1,3,1,1,1,1,2,1,1,1,
-                      1,4,2,4,1,1,2,3,1,1,1,1,1,1,1,1,3,2,2,1,3,5,3,1,1,1,1,2,3,1,2,1,1,
-                      1,2,1]
-
-            
-                   import altair as alt
-
-
-                   plt_dist=pd.DataFrame(lamda_T1,index=pd.RangeIndex(72, name='x'))
-                   plt_dist['T1: #Covid']=plt[0]
-                   plt['T2: #Vaccine']=lamda_T2
-                   plt_dist['T3: #SA_Lockdown']=lamda_T3
-                   plt_dist=plt_dist[['T1: #Covid','T2: #Vaccine','T3: #SA_Lockdown']]
-                   plt1=plt_dist[['T1: #Covid']]
-                   plt2=plt_dist[['T2: #Vaccine']]
-                   plt3=plt_dist[['T3: #SA_Lockdown']]
-        
-                   plt1 = plt1.reset_index().melt('x', var_name='category', value_name='y')
-                
-                   line_chart1= alt.Chart(plt1).mark_line(interpolate='basis').encode(
-                          alt.X('x', title='hour'),
-                          alt.Y('y', title='count of retweets'),
-                          color='category:N'
-                          ).properties(
-                           title='Topic1'
-                          )
+                   
+                   st.write('Topic analysis/prediciton:')
+                   
+                   st.write(Topic_m.predict(sub_data['Microblog_text']))
  
-                   plt2 = plt2.reset_index().melt('x', var_name='category', value_name='y')
-                                
-                   line_chart2= alt.Chart(plt2).mark_line(interpolate='basis').encode(
-                          alt.X('x', title='hour'),
-                          alt.Y('y', title='count of retweets'),
-                          color='category:N'
-                          ).properties(
-                           title='Topic2'
-                          )
+                           
+                 
+                   st.write("User & Content based Table based on input data")
+                   st.dataframe(sub_data_pred)
+                   
+                   st.write("Overall Sentiment:")
+         
+                   st.write("{}: {} : {}".format("Positive Sentiment" ,str(int(face_det[0]))+'%',emoji.emojize(':grinning_face_with_big_eyes:')))
+                   st.write("{}: {} : {}".format("Neutral Sentiment" ,str(int(face_det[1]))+'%',emoji.emojize(':neutral_face:')))
+                   st.write("{}: {} : {}".format("Negative Sentiment" ,str(int(face_det[2]))+'%',emoji.emojize(':angry_face:')))
+                                           
+                 
+                   st.write("4.2. Likelihood of microblog trending:") 
+                   
+                 
+                   st.write("Probability split:") 
+                   #
+                   
+                   st.dataframe(pred_cat)
+         
+                 
 
-                
-            
-                   plt3 = plt3.reset_index().melt('x', var_name='category', value_name='y')
-                                                
-                   line_chart3= alt.Chart(plt3).mark_line(interpolate='basis').encode(
-                          alt.X('x', title='hour'),
-                          alt.Y('y', title='count of retweets'),
-                          color='category:N'
-                          ).properties(
-                           title='Topic3'
-                          )
-
-                   plt_dist = plt_dist.reset_index().melt('x', var_name='category', value_name='y') 
-                   line_chart = alt.Chart(plt_dist).mark_line(interpolate='basis').encode(
-                          alt.X('x', title='hour'),
-                          alt.Y('y', title='count of retweets'),
-                          color='category:N'
-                          ).properties(
-                           title='retweet count distribution in the first 72hours')
-            
-                   st.subheader('Expected distribution plot per topic')
-            
-            
-                   st.subheader("Individual Distrubtion plot")
-                   radi_distribu=st.radio('Show distribution plot', ['Combined plot','Topic1','Topic2','Topic3'])
-                   if radi_distribu=='Combined plot':
-                     st.subheader("Combined Distrubtion plot")
-                     st.altair_chart(line_chart,use_container_width=True)
-                
-                   if radi_distribu=='Topic1':
-                     st.subheader("Topic1 Distrubtion plot")
-                     st.altair_chart(line_chart1,use_container_width=True)
-            
-                   if radi_distribu=='Topic2':
-                     st.subheader("Topic2 Distrubtion plot")
-                     st.altair_chart(line_chart2,use_container_width=True)
-                
-                   if radi_distribu=='Topic3':
-                     st.subheader("Topic3 Distrubtion plot")
-                     st.altair_chart(line_chart3,use_container_width=True)            
-        
-                   st.subheader('Get probability of retweet count based on topic.')
-            
-                   Count_tweet = st.slider('Count of Tweet',step=1, max_value=500)
-                   hr_tweet=st.slider('hour since tweeted',max_value=72,step=1)
-                   tweet_topic=st.slider('Topic Number',max_value=3,step=1)
-
-                   from scipy.stats import poisson
-            
-                   if tweet_topic==1:
-                     lambda_dist=lamda_T1
-                     lambda_val=lambda_dist[hr_tweet]
-                     prob=poisson.pmf(Count_tweet,lambda_val)
-                
-                     st.write('Probabilty of retweet count is:')
-                     st.write(prob)
-                   elif tweet_topic==2:
-                     lambda_dist=lamda_T2
-                     lambda_val=lambda_dist[hr_tweet]
-                     prob=poisson.pmf(Count_tweet,lambda_val)
-                
-                     st.write('Probabilty of retweet count is:')
-                     st.write(prob)
-                   elif tweet_topic==3:
-                     lambda_dist=lamda_T3
-                     lambda_val=lambda_dist[hr_tweet]
-                     prob=poisson.pmf(Count_tweet,lambda_val)
-                
-                     st.write('Probabilty of retweet count is:')
-                     st.write(prob)
-
-            
-                               
-                if st.checkbox('Predict probability microblog will trend'):
-                  st.subheader("Likelihood of microblog trending:") 
-                  st.write("Probability split:") 
-
-                  st.dataframe(pred_cat)
-
-# =============================================================================
-#                 Data_file=st.sidebar.file_uploader(label="Upload csv raw file", type=['xlsx'])
-#               
-#                 if st.button('Predict'):
-#                   data=pd.read_excel(Data_file)
-# 
-#                   sub_data=self.sub_df(data)
-#                   corpus=sub_data['Microblog_text']
-#                   Tp=Topic_num(corpus)
-#                 
-#                   Senti=self.Sentiment_url(corpus)
-# 
-#                   sub_data['Sentiment']=Senti["sentiment"]
-#                   sub_data['Sentiment_Cat']=Senti["Sentiment_Cat"]
-#                   sub_data['No_Urls']=Senti["urls"]
-#                   sub_data['Topic']=pd.DataFrame(Tp, columns={'Topic'})
-#                 
-#                   sub_data_pred=sub_data[['number_of_followers','number_of_times_listed','Length','fav_Count','user_verified','status_Count','has_image','DaysActive','Sentiment_Cat','No_Urls','Topic','has_decription']]
-#                   
-#                   sent=sub_data['Sentiment']
-#                   face_det=(sent.value_counts()/len(sent))*100
-#                   
-#                   
-#                   emo=[]
-#                   for i in face_det:
-#                       if i=="Pos":
-#                           emoji_=emoji.emojize(':grinning_face_with_big_eyes:')
-#                           emo.append(emoji_)
-#                       elif i=="Neg":
-#                           emoji_=emoji.emojize(':neutral_face:')
-#                           emo.append(emoji_)
-#                       else:
-#                           emoji_=emoji.emojize(':angry_face:')
-#                           emo.append(emoji_)
-#                           
-#                   pred_cat=pd.DataFrame(Trending_model.predict(sub_data_pred))
-#                   pred_val=[]
-#                   
-#                   for i in pred_cat[0]:
-#                       if i==0:
-#                           val='Trending'
-#                           pred_val.append(val)
-#                       else:
-#                           val='Wont Trending'
-#                           pred_val.append(val)
-#                       
-# 
-#                   
-#                   cf_lvl=pd.DataFrame(Trending_model.predict_proba(sub_data_pred))
-#                   
-#                   pred_cat['Pred category']=pred_cat[0]
-#                   pred_cat['Text']=sub_data['Microblog_text']
-#                   pred_cat['Projected Status']=pred_val
-#                   pred_cat['Confidence Level']=cf_lvl[0]
-#                   
-#                   st.write('Topic analysis/prediciton:')
-#                   
-#                   st.write(Topic_m.predict(sub_data['Microblog_text']))
-# 
-#                           
-#                 
-#                   st.write("User & Content based Table based on input data")
-#                   st.dataframe(sub_data_pred)
-#                   
-#                   st.write("Overall Sentiment:")
-#         
-#                   st.write("{}: {} : {}".format("Positive Sentiment" ,str(int(face_det[0]))+'%',emoji.emojize(':grinning_face_with_big_eyes:')))
-#                   st.write("{}: {} : {}".format("Neutral Sentiment" ,str(int(face_det[1]))+'%',emoji.emojize(':neutral_face:')))
-#                   st.write("{}: {} : {}".format("Negative Sentiment" ,str(int(face_det[2]))+'%',emoji.emojize(':angry_face:')))
-#                                           
-#                 
-#                   st.write("4.2. Likelihood of microblog trending:") 
-#                   
-#                 
-#                   st.write("Probability split:") 
-#                   #
-#                   
-#                   st.dataframe(pred_cat)
-#         
-#                 
-# =============================================================================
             if choice=="Single prediction":
               
               st.sidebar.subheader("User Information:")
