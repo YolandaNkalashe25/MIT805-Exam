@@ -667,6 +667,17 @@ class SubSet_Data:
               
               
           return sentiment_url
+      pickle_in = open("Topic1_classfier.pkl", "rb") 
+      model=pickle.load(pickle_in)
+
+      pickle_in = open("Trending_classfier.pkl", "rb") 
+      Trending_model=pickle.load(pickle_in)
+
+      pickle_in = open("Topic2_classfier.pkl", "rb") 
+      Topic_m=pickle.load(pickle_in)
+                
+      
+          
 
       
 
@@ -688,18 +699,9 @@ class SubSet_Data:
             
           
             if choice== "Bulk prediction":
-                
-                pickle_in = open("Topic1_classfier.pkl", "rb") 
-                model=pickle.load(pickle_in)
-
-                pickle_in = open("Trending_classfier.pkl", "rb") 
-                Trending_model=pickle.load(pickle_in)
-
-                pickle_in = open("Topic2_classfier.pkl", "rb") 
-                Topic_m=pickle.load(pickle_in)
-                
                 Data_file=st.sidebar.file_uploader(label="Upload csv raw file", type=['xlsx'])
-          
+                
+         
           
                 if st.checkbox('Generate User & Content Based Feature Table'):
      
@@ -711,7 +713,7 @@ class SubSet_Data:
 
                    sub_data=self.sub_df(data)
                    corpus=sub_data['Microblog_text']
-                   Tp=Topic_num(corpus)
+                   Tp=self.Topic_num(corpus)
         
                    Senti=self.Sentiment_url(corpus)
 
