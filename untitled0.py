@@ -1058,7 +1058,6 @@ class SubSet_Data:
                     
                   plt1 = plt1.reset_index().melt('x', var_name='category', value_name='y')
                   
-                  plt1 = plt1.reset_index().melt('x', var_name='category', value_name='y')
                 
                   line_chart1= alt.Chart(plt1).mark_line(interpolate='basis').encode(
                           alt.X('x', title='hour'),
@@ -1108,11 +1107,11 @@ class SubSet_Data:
                        st.subheader("Topic1 Distrubtion plot")
                        st.altair_chart(line_chart1,use_container_width=True)
             
-                  elif pred_Topic['Topic_Cat'][0]==2:
+                  elif pred_Topic['Topic_Cat'][0]=='2':
                        st.subheader("Topic2 Distrubtion plot")
                        st.altair_chart(line_chart2,use_container_width=True)
                 
-                  elif pred_Topic['Topic_Cat'][0]==3:
+                  elif pred_Topic['Topic_Cat'][0]=='3':
                        st.subheader("Topic3 Distrubtion plot")
                        st.altair_chart(line_chart3,use_container_width=True)    
                        
