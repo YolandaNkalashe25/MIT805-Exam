@@ -907,11 +907,11 @@ class SubSet_Data:
                         st.write('Probabilty of retweet count is:')
                         st.write(prob)
                         
-                if st.checkbox('Predict probability microblog will trend'):
-                    st.subheader("Likelihood of microblog trending:") 
-                    st.write("Probability split:") 
+                    if st.checkbox('Predict probability microblog will trend'):
+                       st.subheader("Likelihood of microblog trending:") 
+                       st.write("Probability split:") 
 
-                    st.dataframe(pred_cat)
+                       st.dataframe(pred_cat)
   
   
 
