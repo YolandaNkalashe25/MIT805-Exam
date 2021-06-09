@@ -1005,10 +1005,9 @@ class SubSet_Data:
                   pred_cat=pd.DataFrame(pred_cat) 
  
                   pred_cat=pd.DataFrame(data['Microblog_text'])
-                  #pred_cat['Confidence Level']=cf_lvl
+                  pred_cat['Confidence Level']=s_clf.max()
                   st.write(pred_cat)
-                  st.write(int(s_clf.max()))
-                  
+             
                   
 #                   pred_cat['Text']=data['Microblog_text']
 #                   pred_cat['Projected Status']=pred_val
