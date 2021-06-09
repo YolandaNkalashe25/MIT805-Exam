@@ -1028,7 +1028,7 @@ class SubSet_Data:
                   pred_Topic=pd.DataFrame(pred_Topic)
                   pred_Topic['Microblog']=data['Microblog_text']
                   pred_Topic['Topic_Cat']=pred_Topic[0]
-                  pred_Topic['Topic_Name ']=name[0]
+                  pred_Topic['Topic_Name']=name[0]
                   
                   pred_Topic=pred_Topic[['Microblog','Topic_Cat','Topic_Name']]
                    
