@@ -748,29 +748,54 @@ class SubSet_Data:
                    st.write("{}: {} : {}".format("Neutral Sentiment" ,str(int(face_det[1]))+'%',emoji.emojize(':neutral_face:')))
                    st.write("{}: {} : {}".format("Negative Sentiment" ,str(int(face_det[2]))+'%',emoji.emojize(':angry_face:')))
                          
-                           
-# =============================================================================
-#                    pred_cat=pd.DataFrame(Trending_model.predict(sub_data_pred))
-#                    pred_val=[]
-#                    
-#                    for i in pred_cat[0]:
-#                        if i==0:
-#                            val='Trending'
-#                            pred_val.append(val)
-#                        else:
-#                            val='Wont Trending'
-#                            pred_val.append(val)
-#                        
-#  
-#                    
-#                    cf_lvl=pd.DataFrame(Trending_model.predict_proba(sub_data_pred))
-#                    
-#                    pred_cat['Pred category']=pred_cat[0]
-#                    pred_cat['Text']=sub_data['Microblog_text']
-#                    pred_cat['Projected Status']=pred_val
-#                    pred_cat['Confidence Level']=cf_lvl[0]
-#                    
-#                    st.write('Topic analysis/prediciton:')
+                if st.checkbox('Predict hourly rate of transmission'):
+                    
+                    pred_cat=pd.DataFrame(Trending_model.predict(sub_data_pred))
+                    pred_val=[]
+
+                    for i in pred_cat[0]:
+                        if i==0:
+                           val='Trending'
+                           pred_val.append(val)
+                        else:
+                            val='Wont Trending'
+                            pred_val.append(val)
+                                       
+                    cf_lvl=pd.DataFrame(Trending_model.predict_proba(sub_data_pred))
+                   
+                    pred_cat['Pred category']=pred_cat[0]
+                    pred_cat['Text']=sub_data['Microblog_text']
+                    pred_cat['Projected Status']=pred_val
+                    pred_cat['Confidence Level']=cf_lvl[0]
+                   
+                    st.write('Topic analysis/prediciton:')
+                    st.write('Topology table')
+                    pred_Topic=Topic_m.predict(sub_data['Microblog_text'])
+                    topic_name=[]
+                    
+                    for i in pred_Topic:
+                        if i=='0':
+                          val='T_Vaccine'
+                          topic_name.append(val)
+                        elif i=='1':
+                          val='T_Covid19'
+                          topic_name.append(val)
+                        else:
+                          val='T_SA_lockdown'
+                          topic_name.append(val)
+                          
+                    pred_Topic=pd.DataFrame(pred_Topic)
+                    pred_Topic['Microblog']=sub_data['Microblog_text']
+                    pred_Topic['Topic_Cat']=pred_Topic[0]
+                    pred_Topic['Topic_Name']=topic_name
+            
+                    pred_Topic=pred_Topic[['Microblog','Topic_Cat','Topic_Name']]
+            
+                    st.dataframe(pred_Topic)
+     
+
+
+ 
 #                    
 #                    st.write(Topic_m.predict(sub_data['Microblog_text']))
 #  
