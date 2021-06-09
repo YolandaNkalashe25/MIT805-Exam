@@ -1124,6 +1124,8 @@ class SubSet_Data:
                     
                   if pred_Topic['Topic_Cat'][0]=='1':
                         lambda_dist=lamda_T1
+                        Count_tweet = st.slider('Count of Tweet',step=1, max_value=50)
+                        hr_tweet=st.slider('hour since tweeted',max_value=72,step=1)
                         lambda_val=lambda_dist[hr_tweet]
                         prob=poisson.pmf(Count_tweet,lambda_val)
                 
@@ -1132,6 +1134,8 @@ class SubSet_Data:
                 
                   elif pred_Topic['Topic_Cat'][0]=='2':
                         lambda_dist=lamda_T2
+                        Count_tweet = st.slider('Count of Tweet',step=1, max_value=1200)
+                        hr_tweet=st.slider('hour since tweeted',max_value=72,step=1)
                         lambda_val=lambda_dist[hr_tweet]
                         prob=poisson.pmf(Count_tweet,lambda_val)
                 
@@ -1140,6 +1144,8 @@ class SubSet_Data:
                         
                   elif pred_Topic['Topic_Cat'][0]=='3':
                         lambda_dist=lamda_T3
+                        Count_tweet = st.slider('Count of Tweet',step=1, max_value=20)
+                        hr_tweet=st.slider('hour since tweeted',max_value=72,step=1)
                         lambda_val=lambda_dist[hr_tweet]
                         prob=poisson.pmf(Count_tweet,lambda_val)
                 
