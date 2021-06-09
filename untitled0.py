@@ -706,7 +706,7 @@ class SubSet_Data:
 
                    sub_data=self.sub_df(data)
                    corpus=sub_data['Microblog_text']
-                   Tp=Topic_num(corpus)
+                   Tp=self.Topic_num(corpus)
                  
                    Senti=self.Sentiment_url(corpus)
  
