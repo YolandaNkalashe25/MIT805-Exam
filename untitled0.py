@@ -988,28 +988,32 @@ class SubSet_Data:
             
               if st.checkbox('Predict hourly rate of transmission'):
                   
-                  pred_cat=self.Trending_model.predict(data)
-                  pred_val=[]
-
-                  if pred_cat==0:
-                      val='Trending'
-                      pred_val.append(val)
-                  else:
-                      val='Wont Trending'
-                      pred_val.append(val)
-                                       
-                  cf_lvl=pd.DataFrame(self.Trending_model.predict_proba(sub_data_pred))
-                   
-                  pred_cat['Pred category']=pred_cat
-                  pred_cat_T=pd.DataFrame(data['Microblog_text'])
-                  pred_cat['Text']=data['Microblog_text']
-                  pred_cat['Projected Status']=pred_val
-                  pred_cat['Confidence Level']=cf_lvl
-                   
-                  st.write('Topic analysis/prediciton:')
-                  st.write('Topology table')
-                  pred_Topic=self.Topic_m.predict(data['Microblog_text'])
-                  topic_name=[]
+                  pred_cat=self.Trending_model.predict(sub_data_pred)
+                  
+                  st.write(pred_cat)
+# =============================================================================
+#                   pred_val=[]
+# 
+#                   if pred_cat==0:
+#                       val='Trending'
+#                       pred_val.append(val)
+#                   else:
+#                       val='Wont Trending'
+#                       pred_val.append(val)
+#                                        
+#                   cf_lvl=pd.DataFrame(self.Trending_model.predict_proba(sub_data_pred))
+#                    
+#                   pred_cat['Pred category']=pred_cat
+#                   pred_cat_T=pd.DataFrame(data['Microblog_text'])
+#                   pred_cat['Text']=data['Microblog_text']
+#                   pred_cat['Projected Status']=pred_val
+#                   pred_cat['Confidence Level']=cf_lvl
+#                    
+#                   st.write('Topic analysis/prediciton:')
+#                   st.write('Topology table')
+#                   pred_Topic=self.Topic_m.predict(data['Microblog_text'])
+#                   topic_name=[]
+# =============================================================================
                     
     
               
