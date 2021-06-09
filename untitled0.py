@@ -1023,13 +1023,15 @@ class SubSet_Data:
                           topic_name='T_SA_lockdown'
 
                           
-                  pred_Topic=pd.DataFrame(pred_Topic)
-                  pred_Topic['Microblog']=Microblog_text
-                  pred_Topic['Topic_Cat']=pred_Topic[0]
-                  pred_Topic['Topic_Name']=topic_name
-            
-                  pred_Topic=pred_Topic[['Microblog','Topic_Cat','Topic_Name']]
-            
+                  pred_Topic=pd.DataFrame(topic_name)
+# =============================================================================
+#                   pred_Topic['Microblog']=Microblog_text
+#                   pred_Topic['Topic_Cat']=pred_Topic[0]
+#                   pred_Topic['Topic_Name']=topic_name
+#             
+#                   pred_Topic=pred_Topic[['Microblog','Topic_Cat','Topic_Name']]
+#             
+# =============================================================================
                   st.dataframe(pred_Topic)
                     
     
