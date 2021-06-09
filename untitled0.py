@@ -744,9 +744,9 @@ class SubSet_Data:
                            
                    
          
-                   st.write("{}: {} : {}".format("Positive Sentiment" ,str(int(face_det[0]))+'%',emoji.emojize(':grinning_face_with_big_eyes:')))
-                   st.write("{}: {} : {}".format("Neutral Sentiment" ,str(int(face_det[1]))+'%',emoji.emojize(':neutral_face:')))
-                   st.write("{}: {} : {}".format("Negative Sentiment" ,str(int(face_det[2]))+'%',emoji.emojize(':angry_face:')))
+                   st.write("{}:{}".format("Positive Sentiment"+emoji.emojize(':grinning_face_with_big_eyes:'),str(int(face_det[0]))+'%'))
+                   st.write("{}:{}".format("Neutral Sentiment"+ emoji.emojize(':neutral_face:') ,str(int(face_det[1]))+'%'))
+                   st.write("{}:{}".format("Negative Sentiment"+emoji.emojize(':angry_face:') ,str(int(face_det[2]))+'%'))
                          
                 if st.checkbox('Predict hourly rate of transmission'):
                     
@@ -914,33 +914,6 @@ class SubSet_Data:
                        st.dataframe(pred_cat)
   
   
-
- 
-   
-
-
- 
-#                    
-#                    st.write(Topic_m.predict(sub_data['Microblog_text']))
-#  
-#                            
-#                  
-#                    st.write("User & Content based Table based on input data")
-#                    
-#                    
-#                                      
-#                  
-#                    st.write("4.2. Likelihood of microblog trending:") 
-#                    
-#                  
-#                    st.write("Probability split:") 
-#                    #
-#                    
-#                    st.dataframe(pred_cat)
-#          
-#                  
-# =============================================================================
-
             if choice=="Single prediction":
               
               st.sidebar.subheader("User Information:")
@@ -961,65 +934,114 @@ class SubSet_Data:
                   
                   }
               
-              data = pd.DataFrame([features])
               
-              if st.button('Predict'):
-                  data = pd.DataFrame([features])
-                  corpus=data['Microblog_text']
-                  Tp=self.Topic_num(corpus)
-                  Senti=self.Sentiment_url(corpus)
-                  
-                  Length=len(data['Microblog_text'])
-                  
-                  import datetime
               
-                  data['Date_user_created'] =  pd.to_datetime(data['Date_user_created'])
-                  data['Date_user_created'] =  pd.to_datetime(data['Date_user_created'],format="%Y-%m-%d")
+              if st.checkbox('Generate User & Content Based Feature Table'):
+                                  
+                   st.header("User & Content Based Feature Table Modelling:")
+                   st.subheader("Sub-Table based on input data")
+                   
+                   data = pd.DataFrame([features])
+                  
+    
+                   corpus=sub_data['Microblog_text']
+                   Tp=self.Topic_num(corpus)
+                 
+                   Senti=self.Sentiment_url(corpus)
+                   
+                   Length=len(data['Microblog_text'])
+                   
+                   import datetime
+              
+                   data['Date_user_created'] =  pd.to_datetime(data['Date_user_created'])
+                   data['Date_user_created'] =  pd.to_datetime(data['Date_user_created'],format="%Y-%m-%d")
+                   
+                   d1 = data['Date_user_created']
+                   Today = datetime.datetime.now()
 
-                  d1 = data['Date_user_created']
-                  Today = datetime.datetime.now() 
-                  
-                  diff_Created=(Today - d1.min())
-                  DaysActive=diff_Created.days
+                   diff_Created=(Today - d1.min())
+                   DaysActive=diff_Created.days
               
-                  data['Sentiment']=Senti["sentiment"]
-                  data['Sentiment_Cat']=Senti["Sentiment_Cat"]
-                  data['No_Urls']=Senti["urls"]
-                  data['Topic']=pd.DataFrame(Tp, columns={'Topic'})
-                  data['Length']=Length
-                  data['DaysActive']=DaysActive
-                  
-                  st.write(data[['Sentiment_Cat','Sentiment']].head()) 
-                  
-                  sub_data=data[['number_of_followers','number_of_times_listed','Length','fav_Count','user_verified','status_Count','has_image','DaysActive','Sentiment_Cat','No_Urls','Topic','has_decription']]
-                  #remove sentiment column from subdata
-                  pred_cat=self.Trending_model.predict(sub_data)
-                  pred_val=list()
-                  
-                  for i in pred_cat:
-                      if i==0:
-                          val='Trending'
-                      else:
-                          val='Wont Trending'
-                      pred_val.append(val)
-                      
-                  pred_table=pd.DataFrame()
-                  
-                  cf_lvl=self.Trending_model.predict_proba(sub_data)
-                  pred_table['Category']=pred_cat
-                  pred_table['Projected Status']=pred_val
-                  pred_table['Confidence Level']=cf_lvl[0][0] #changed from cf_lvl[0]
-                  
-
-                  st.write("Topic number:",pd.DataFrame(Tp))
-                  st.write(data['Sentiment']) #changed from sub_data[sentiment]
-                  
-                  st.dataframe(sub_data)
-                  st.dataframe(pred_table)
-                  
-                  st.write(self.Trending_model.predict(sub_data))
-                  st.write(self.Trending_model.predict_proba(sub_data))
+                   data['Sentiment']=Senti["sentiment"]
+                   data['Sentiment_Cat']=Senti["Sentiment_Cat"]
+                   data['No_Urls']=Senti["urls"]
+                   data['Topic']=pd.DataFrame(Tp, columns={'Topic'})
+                   data['Length']=Length
+                   data['DaysActive']=DaysActive
+                   
+                   st.dataframe(data)
+                   
+                   st.subheader("Overall Sentiment:")
+                   
+                   
+                   if data['Sentiment_Cat']==0:
+                        st.write("{} : {}".format("Positive Sentiment"+emoji.emojize(':grinning_face_with_big_eyes:') ,str(int(face_det[0]))+'%'))
+                   if data['Sentiment_Cat']==1:    
+                        st.write("{} : {}".format("Negative Sentiment"+emoji.emojize(':angry_face:') ,str(int(face_det[0]))+'%'))
+                   if data['Sentiment_Cat']==0:    
+                        st.write("{} : {}".format("Nuetral Sentiment"+emoji.emojize(':neutral_face:') ,str(int(face_det[0]))+'%'))
           
+    
+              
+# =============================================================================
+#               if st.button('Predict'):
+#                   data = pd.DataFrame([features])
+#                   corpus=data['Microblog_text']
+#                   Tp=self.Topic_num(corpus)
+#                   Senti=self.Sentiment_url(corpus)
+#                   
+#                   Length=len(data['Microblog_text'])
+#                   
+#                   import datetime
+#               
+#                   data['Date_user_created'] =  pd.to_datetime(data['Date_user_created'])
+#                   data['Date_user_created'] =  pd.to_datetime(data['Date_user_created'],format="%Y-%m-%d")
+# 
+#                   d1 = data['Date_user_created']
+#                   Today = datetime.datetime.now() 
+#                   
+#                   diff_Created=(Today - d1.min())
+#                   DaysActive=diff_Created.days
+#               
+#                   data['Sentiment']=Senti["sentiment"]
+#                   data['Sentiment_Cat']=Senti["Sentiment_Cat"]
+#                   data['No_Urls']=Senti["urls"]
+#                   data['Topic']=pd.DataFrame(Tp, columns={'Topic'})
+#                   data['Length']=Length
+#                   data['DaysActive']=DaysActive
+#                   
+#                   st.write(data[['Sentiment_Cat','Sentiment']].head()) 
+#                   
+#                   sub_data=data[['number_of_followers','number_of_times_listed','Length','fav_Count','user_verified','status_Count','has_image','DaysActive','Sentiment_Cat','No_Urls','Topic','has_decription']]
+#                   #remove sentiment column from subdata
+#                   pred_cat=self.Trending_model.predict(sub_data)
+#                   pred_val=list()
+#                   
+#                   for i in pred_cat:
+#                       if i==0:
+#                           val='Trending'
+#                       else:
+#                           val='Wont Trending'
+#                       pred_val.append(val)
+#                       
+#                   pred_table=pd.DataFrame()
+#                   
+#                   cf_lvl=self.Trending_model.predict_proba(sub_data)
+#                   pred_table['Category']=pred_cat
+#                   pred_table['Projected Status']=pred_val
+#                   pred_table['Confidence Level']=cf_lvl[0][0] #changed from cf_lvl[0]
+#                   
+# 
+#                   st.write("Topic number:",pd.DataFrame(Tp))
+#                   st.write(data['Sentiment']) #changed from sub_data[sentiment]
+#                   
+#                   st.dataframe(sub_data)
+#                   st.dataframe(pred_table)
+#                   
+#                   st.write(self.Trending_model.predict(sub_data))
+#                   st.write(self.Trending_model.predict_proba(sub_data))
+#           
+# =============================================================================
 def main():
     
   st.sidebar.header('Model and Visualization Selection')
