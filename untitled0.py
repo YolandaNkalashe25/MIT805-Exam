@@ -801,14 +801,14 @@ class SubSet_Data:
                    import altair as alt
 
 
-                   plt=pd.DataFrame(lamda_T1,index=pd.RangeIndex(72, name='x'))
-                   plt['T1: #Covid']=plt[0]
+                   plt_dist=pd.DataFrame(lamda_T1,index=pd.RangeIndex(72, name='x'))
+                   plt_dist['T1: #Covid']=plt[0]
                    plt['T2: #Vaccine']=lamda_T2
-                   plt['T3: #SA_Lockdown']=lamda_T3
-                   plt=plt[['T1: #Covid','T2: #Vaccine','T3: #SA_Lockdown']]
-                   plt1=plt[['T1: #Covid']]
-                   plt2=plt[['T2: #Vaccine']]
-                   plt3=plt[['T3: #SA_Lockdown']]
+                   plt_dist['T3: #SA_Lockdown']=lamda_T3
+                   plt_dist=plt_dist[['T1: #Covid','T2: #Vaccine','T3: #SA_Lockdown']]
+                   plt1=plt_dist[['T1: #Covid']]
+                   plt2=plt_dist[['T2: #Vaccine']]
+                   plt3=plt_dist[['T3: #SA_Lockdown']]
         
                    plt1 = plt1.reset_index().melt('x', var_name='category', value_name='y')
                 
@@ -842,8 +842,8 @@ class SubSet_Data:
                            title='Topic3'
                           )
 
-                   plt = plt.reset_index().melt('x', var_name='category', value_name='y') 
-                   line_chart = alt.Chart(plt).mark_line(interpolate='basis').encode(
+                   plt_dist = plt_dist.reset_index().melt('x', var_name='category', value_name='y') 
+                   line_chart = alt.Chart(plt_dist).mark_line(interpolate='basis').encode(
                           alt.X('x', title='hour'),
                           alt.Y('y', title='count of retweets'),
                           color='category:N'
@@ -869,14 +869,14 @@ class SubSet_Data:
                 
                    if radi_distribu=='Topic3':
                      st.subheader("Topic3 Distrubtion plot")
-                     st.altair_chart(line_chart2,use_container_width=True)            
+                     st.altair_chart(line_chart3,use_container_width=True)            
         
                    st.subheader('Get probability of retweet count based on topic.')
             
                    Count_tweet = st.slider('Count of Tweet',step=1, max_value=500)
                    hr_tweet=st.slider('hour since tweeted',max_value=72,step=1)
                    tweet_topic=st.slider('Topic Number',max_value=3,step=1)
-                   from numpy import random
+
                    from scipy.stats import poisson
             
                    if tweet_topic==1:
