@@ -874,15 +874,16 @@ class SubSet_Data:
                        st.subheader("Topic3 Distrubtion plot")
                        st.altair_chart(line_chart2,use_container_width=True)    
                        
-                    if st.checkbox('Get probability of retweet count based on topic.'):
+                    st.subheader('Get probability of retweet count based on topic.')
                     
-                      Count_tweet = st.slider('Count of Tweet',step=1, max_value=500)
-                      hr_tweet=st.slider('hour since tweeted',max_value=72,step=1)
-                      tweet_topic=st.slider('Topic Number',max_value=3,step=1)
-                      from numpy import random
-                      from scipy.stats import poisson
+            
+                    Count_tweet = st.slider('Count of Tweet',step=1, max_value=500)
+                    hr_tweet=st.slider('hour since tweeted',max_value=72,step=1)
+                    tweet_topic=st.slider('Topic Number',max_value=3,step=1)
+                    from numpy import random
+                    from scipy.stats import poisson
                     
-                      if tweet_topic==1:
+                    if tweet_topic==1:
                         lambda_dist=lamda_T1
                         lambda_val=lambda_dist[hr_tweet]
                         prob=poisson.pmf(Count_tweet,lambda_val)
@@ -890,7 +891,7 @@ class SubSet_Data:
                         st.write('Probabilty of retweet count is:')
                         st.write(prob)
                 
-                      elif tweet_topic==2:
+                    elif tweet_topic==2:
                         lambda_dist=lamda_T2
                         lambda_val=lambda_dist[hr_tweet]
                         prob=poisson.pmf(Count_tweet,lambda_val)
@@ -898,7 +899,7 @@ class SubSet_Data:
                         st.write('Probabilty of retweet count is:')
                         st.write(prob)
                         
-                      elif tweet_topic==3:
+                    elif tweet_topic==3:
                         lambda_dist=lamda_T3
                         lambda_val=lambda_dist[hr_tweet]
                         prob=poisson.pmf(Count_tweet,lambda_val)
