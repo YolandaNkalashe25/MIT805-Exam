@@ -1006,18 +1006,31 @@ class SubSet_Data:
  
                   pred_cat=pd.DataFrame(data['Microblog_text'])
                   pred_cat['Confidence Level']=s_clf.max()
-                  st.write(pred_cat)
-             
+                  pred_cat['Projected Status']=pred_val                   
+                    
+                  st.write('Topic analysis/prediciton:')
+                  st.write('Topology table')
+                  pred_Topic=self.Topic_m.predict(sub_data['Microblog_text'])
+                  topic_name=""
                   
-#                   pred_cat['Text']=data['Microblog_text']
-#                   pred_cat['Projected Status']=pred_val
-#                   
-#                    
-#                   st.write('Topic analysis/prediciton:')
-#                   st.write('Topology table')
-#                   pred_Topic=self.Topic_m.predict(data['Microblog_text'])
-#                   topic_name=[]
-# =============================================================================
+
+                  if pred_Topic=='0':
+                        topic_name='T_Vaccine'
+                  elif pred_Topic=='1':
+                          topic_name='T_Covid19'
+
+                  else:
+                          topic_name='T_SA_lockdown'
+
+                          
+                  pred_Topic=pd.DataFrame(pred_Topic)
+                  pred_Topic['Microblog']=sub_data['Microblog_text']
+                  pred_Topic['Topic_Cat']=pred_Topic[0]
+                  pred_Topic['Topic_Name']=topic_name
+            
+                  pred_Topic=pred_Topic[['Microblog','Topic_Cat','Topic_Name']]
+            
+                  st.dataframe(pred_Topic)
                     
     
               
