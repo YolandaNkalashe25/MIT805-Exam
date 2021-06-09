@@ -1117,7 +1117,41 @@ class SubSet_Data:
                        
                   st.subheader('Get probability of retweet count based on topic.')
                
-         
+                  Count_tweet = st.slider('Count of Tweet',step=1, max_value=500)
+                  hr_tweet=st.slider('hour since tweeted',max_value=72,step=1)
+                  from numpy import random
+                  from scipy.stats import poisson
+                    
+                  if pred_Topic['Topic_Cat'][0]=='1':
+                        lambda_dist=lamda_T1
+                        lambda_val=lambda_dist[hr_tweet]
+                        prob=poisson.pmf(Count_tweet,lambda_val)
+                
+                        st.write('Probabilty of retweet count is:')
+                        st.write(prob)
+                
+                  elif pred_Topic['Topic_Cat'][0]=='2':
+                        lambda_dist=lamda_T2
+                        lambda_val=lambda_dist[hr_tweet]
+                        prob=poisson.pmf(Count_tweet,lambda_val)
+                
+                        st.write('Probabilty of retweet count is:')
+                        st.write(prob)
+                        
+                  elif pred_Topic['Topic_Cat'][0]=='3':
+                        lambda_dist=lamda_T3
+                        lambda_val=lambda_dist[hr_tweet]
+                        prob=poisson.pmf(Count_tweet,lambda_val)
+                
+                        st.write('Probabilty of retweet count is:')
+                        st.write(prob)
+                        
+                  if st.checkbox('Predict probability microblog will trend'):
+                       st.subheader("Likelihood of microblog trending:") 
+                       st.write("Probability split:") 
+
+                       st.dataframe(pred_cat)
+
      
               
 # =============================================================================
