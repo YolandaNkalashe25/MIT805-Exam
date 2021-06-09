@@ -1025,7 +1025,9 @@ class SubSet_Data:
                           name.append(topic_name)
 
                           
-                  #pred_Topic=pd.DataFrame(topic_name)
+                  pred_Topic=pd.DataFrame(pred_Topic)
+                  #pred_Topic['Topic_Name ']=name
+                   
 # =============================================================================
 #                   pred_Topic['Microblog']=Microblog_text
 #                   pred_Topic['Topic_Cat']=pred_Topic[0]
@@ -1034,7 +1036,8 @@ class SubSet_Data:
 #                   pred_Topic=pred_Topic[['Microblog','Topic_Cat','Topic_Name']]
 #             
 # =============================================================================
-                  st.write(topic_name)
+                  st.write(name)
+                  st.write(pred_Topic)
                     
     
               
