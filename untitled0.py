@@ -691,10 +691,7 @@ class SubSet_Data:
           
           
           # Title
-          st.title("Covid19za Consortium")
-          st.subheader("Analysis and Predictor Models for Covid19 Microblog data ")
-          st.write("This app uses a microblog, twitter data to help identify communication straegy for health and government officials during pandemics in social platforms We use user and microblog content information to predict if a model will Trend  and rate of tranmission of a blog through statistcal distribution approaches, we also further cluster the text between SA and NonSA and determine sentiment betweeen the groups.")
-        
+          
           pick=["","Viaualization/Dashboard","Prediction"]
           choice=st.sidebar.selectbox("Menu", pick)
           
@@ -877,7 +874,11 @@ class SubSet_Data:
                   st.write(self.Trending_model.predict_proba(sub_data))
           
 def main():
-
+    
+  st.title("Covid19za Consortium")
+  st.subheader("Analysis and Predictor Models for Covid19 Microblog data ")
+  st.write("This app uses a microblog, twitter data to help identify communication straegy for health and government officials during pandemics in social platforms We use user and microblog content information to predict if a model will Trend  and rate of tranmission of a blog through statistcal distribution approaches, we also further cluster the text between SA and NonSA and determine sentiment betweeen the groups.")
+        
   st.sidebar.write("SELECT DATA TO USE")
   data_option=st.sidebar.selectbox("Data Option",("<Select Option>","Full Dataset","Sub Dataset"))
   if data_option=="Full Dataset":
