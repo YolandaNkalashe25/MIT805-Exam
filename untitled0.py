@@ -740,7 +740,10 @@ class SubSet_Data:
                  
             
                 if st.checkbox('Predict hourly rate of transmission '):
-                   pred_cat=pd.DataFrame(self.Trending_model.predict(sub_data_pred))
+                   pickle_in = open("Trending_classfier.pkl", "rb") 
+                   Trending_model=pickle.load(pickle_in)
+                    
+                   pred_cat=pd.DataFrame(Trending_model.predict(sub_data_pred))
                    pred_val=[]
              
                    for i in pred_cat[0]:
@@ -753,7 +756,7 @@ class SubSet_Data:
                  
 
              
-                   cf_lvl=pd.DataFrame(self.Trending_model.predict_proba(sub_data_pred))
+                   cf_lvl=pd.DataFrame(Trending_model.predict_proba(sub_data_pred))
              
                    pred_cat['Pred category']=pred_cat[0]
                    pred_cat['Text']=sub_data['Microblog_text']
