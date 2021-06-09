@@ -988,25 +988,29 @@ class SubSet_Data:
                   
                   pred_cat=self.Trending_model.predict(data)
                   pred_val=[]
-
-                  if pred_cat==0:
-                      val='Trending'
-                      pred_val.append(val)
-                  else:
-                      val='Wont Trending'
-                      pred_val.append(val)
-                                       
-                  cf_lvl=pd.DataFrame(self.Trending_model.predict_proba(data))
-
-                  pred_cat_T=pd.DataFrame(data['Microblog_text'])
-                  pred_cat['Text']=data['Microblog_text']
-                  pred_cat['Projected Status']=pred_val
-                  pred_cat['Confidence Level']=cf_lvl[0]
-                   
-                  st.write('Topic analysis/prediciton:')
-                  st.write('Topology table')
-                  pred_Topic=self.Topic_m.predict(data['Microblog_text'])
-                  topic_name=[]
+                  
+                  st.write(pred_cat)
+# =============================================================================
+# 
+#                   if pred_cat==0:
+#                       val='Trending'
+#                       pred_val.append(val)
+#                   else:
+#                       val='Wont Trending'
+#                       pred_val.append(val)
+#                                        
+#                   cf_lvl=pd.DataFrame(self.Trending_model.predict_proba(data))
+# 
+#                   pred_cat_T=pd.DataFrame(data['Microblog_text'])
+#                   pred_cat['Text']=data['Microblog_text']
+#                   pred_cat['Projected Status']=pred_val
+#                   pred_cat['Confidence Level']=cf_lvl[0]
+#                    
+#                   st.write('Topic analysis/prediciton:')
+#                   st.write('Topology table')
+#                   pred_Topic=self.Topic_m.predict(data['Microblog_text'])
+#                   topic_name=[]
+# =============================================================================
                     
     
               
