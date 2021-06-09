@@ -972,7 +972,7 @@ class SubSet_Data:
 
                    
                     
-                      
+                   sub_data_pred=data[['number_of_followers','number_of_times_listed','Length','fav_Count','user_verified','status_Count','has_image','DaysActive','Sentiment_Cat','No_Urls','Topic','has_decription']]
                    st.dataframe(data)
                    
                    st.subheader("Overall Sentiment:")
@@ -998,7 +998,7 @@ class SubSet_Data:
                       val='Wont Trending'
                       pred_val.append(val)
                                        
-                  cf_lvl=pd.DataFrame(self.Trending_model.predict_proba(data))
+                  cf_lvl=pd.DataFrame(self.Trending_model.predict_proba(sub_data_pred))
                    
                   pred_cat['Pred category']=pred_cat[0]
                   pred_cat_T=pd.DataFrame(data['Microblog_text'])
