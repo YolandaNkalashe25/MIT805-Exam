@@ -691,12 +691,11 @@ class SubSet_Data:
           
           
           
-            st.header("User & Content Based Feature Table:")
+            st.subheader("User & Content Based Feature Table:")
           
           
           
             #Creating side bar to upload the file
-            st.sidebar.subheader("Model and Visualization Headings")
             menu=["","Bulk prediction","Single prediction"]
             choice=st.sidebar.selectbox("Choose data load method", menu)
           
@@ -861,23 +860,24 @@ class SubSet_Data:
           
 def main():
     
-  st.title("Covid19za Consortium")
-  st.subheader("Analysis and Predictor Models for Covid19 Microblog data ")
-  st.write("This app uses a microblog, twitter data to help identify communication straegy for health and government officials during pandemics in social platforms. The dataset used contains user, retweet and microblog content information. ")
-  
-  st.write("The app will:")
-  st.write('1. Predict if microblog text is SA or International, and identify sentiment between the two clusters.')
-  st.write('2. Predict influncer status of user')
-  st.write('3. Identify distribution of microblog based on predicted topic')
-  st.write('4. Predict if Microblog will trend.')
-  
-  st.markdown('The first two predictions uses original dataset for predicitons whilst the rest uses the subset   **select data to achieve required prediction**.')  
-  
+  st.sidebar.header('Model and Visualization Selection')
   pick=["","Viaualization/Dashboard","Prediction"]
   choice=st.sidebar.selectbox("Menu", pick)
   
   if choice=='Prediction':
-    st.sidebar.write("SELECT DATA TO USE")
+    st.title("Covid19za Consortium")
+    st.subheader("Analysis and Predictor Models for Covid19 Microblog data ")
+    st.write("This app uses a microblog, twitter data to help identify communication straegy for health and government officials during pandemics in social platforms. The dataset used contains user, retweet and microblog content information. ")
+  
+    st.write("The app will:")
+    st.write('1. Predict if microblog text is SA or International, and identify sentiment between the two clusters.')
+    st.write('2. Predict influncer status of user')
+    st.write('3. Identify distribution of microblog based on predicted topic')
+    st.write('4. Predict if Microblog will trend.')
+  
+    st.markdown('The first two predictions uses original dataset for predicitons whilst the rest uses the subset   **select data to achieve required prediction**.')  
+  
+    st.sidebar.subheader("SELECT DATA TO USE")
     data_option=st.sidebar.selectbox("Data Option",("<Select Option>","Original Dataset","Sub Dataset"))
     if data_option=="Original Dataset":
         Full_Data().main_full()
