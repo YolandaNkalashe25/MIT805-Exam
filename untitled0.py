@@ -990,7 +990,7 @@ class SubSet_Data:
                   
                   pred_cat=self.Trending_model.predict(sub_data_pred)
                   
-                  st.write(pred_cat)
+                  st.write(pred_cat[0])
 # =============================================================================
 #                   pred_val=[]
 # 
