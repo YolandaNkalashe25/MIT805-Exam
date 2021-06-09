@@ -1102,15 +1102,15 @@ class SubSet_Data:
                 
                   st.subheader("Individual Distrubtion plot")
                 
-                  if pred_Topic['Topic_Cat']==1:
+                  if pred_Topic['Topic_Cat'][0]==1:
                        st.subheader("Topic1 Distrubtion plot")
                        st.altair_chart(line_chart1,use_container_width=True)
             
-                  if pred_Topic['Topic_Cat']==2:
+                  if pred_Topic['Topic_Cat'][0]==2:
                        st.subheader("Topic2 Distrubtion plot")
                        st.altair_chart(line_chart2,use_container_width=True)
                 
-                  if pred_Topic['Topic_Cat']==3:
+                  if pred_Topic['Topic_Cat'][0]==3:
                        st.subheader("Topic3 Distrubtion plot")
                        st.altair_chart(line_chart2,use_container_width=True)    
                        
