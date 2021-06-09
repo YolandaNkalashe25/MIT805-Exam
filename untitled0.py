@@ -582,15 +582,6 @@ class SubSet_Data:
           return MicroblogText_df
           
 
-      pickle_in = open("Topic1_classfier.pkl", "rb") 
-      model=pickle.load(pickle_in)
-
-      pickle_in = open("Trending_classfier.pkl", "rb") 
-      Trending_model=pickle.load(pickle_in)
-
-      pickle_in = open("Topic2_classfier.pkl", "rb") 
-      Topic_m=pickle.load(pickle_in)
-
       def Topic_num(self,corpus_df):
           corpus_df=corpus_df.to_list()
           Topic_ls=[]
@@ -697,6 +688,15 @@ class SubSet_Data:
             
           
             if choice== "Bulk prediction":
+                
+                pickle_in = open("Topic1_classfier.pkl", "rb") 
+                model=pickle.load(pickle_in)
+
+                pickle_in = open("Trending_classfier.pkl", "rb") 
+                Trending_model=pickle.load(pickle_in)
+
+                pickle_in = open("Topic2_classfier.pkl", "rb") 
+                Topic_m=pickle.load(pickle_in)
                 
                 Data_file=st.sidebar.file_uploader(label="Upload csv raw file", type=['xlsx'])
           
