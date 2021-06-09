@@ -1117,8 +1117,7 @@ class SubSet_Data:
                        
                   st.subheader('Get probability of retweet count based on topic.')
                
-                  Count_tweet = st.slider('Count of Tweet',step=1, max_value=500)
-                  hr_tweet=st.slider('hour since tweeted',max_value=72,step=1)
+     
                   from numpy import random
                   from scipy.stats import poisson
                     
