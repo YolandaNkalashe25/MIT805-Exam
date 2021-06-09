@@ -944,8 +944,8 @@ class SubSet_Data:
                    data = pd.DataFrame([features])
                   
     
-                   corpus=sub_data['Microblog_text']
-                   Tp=self.Topic_m.predict(sub_data['Microblog_text'])
+                   corpus=data['Microblog_text']
+                   Tp=self.Topic_m.predict(data['Microblog_text'])
                  
                    Senti=self.Sentiment_url(corpus)
                    
