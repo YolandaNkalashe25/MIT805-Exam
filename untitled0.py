@@ -700,8 +700,8 @@ class SubSet_Data:
           
             Data_file=st.sidebar.file_uploader(label="Upload csv raw file", type=['xlsx'])
                
-                
-            if st.choice('Predict'):
+          
+            if st.radio('Predict'):
                    data=pd.read_excel(Data_file)
 
                    sub_data=self.sub_df(data)
