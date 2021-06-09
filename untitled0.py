@@ -1011,16 +1011,18 @@ class SubSet_Data:
                   st.write('Topic analysis/prediciton:')
                   st.write('Topology table')
                   pred_Topic=self.Topic_m.predict(data['Microblog_text'])
-                  topic_name=""
+                  name=[]
                   
 
                   if pred_Topic=='0':
                         topic_name='T_Vaccine'
+                        name.append(topic_name)
                   elif pred_Topic=='1':
                           topic_name='T_Covid19'
-
+                          name.append(topic_name)
                   else:
                           topic_name='T_SA_lockdown'
+                          name.append(topic_name)
 
                           
                   #pred_Topic=pd.DataFrame(topic_name)
@@ -1032,7 +1034,7 @@ class SubSet_Data:
 #                   pred_Topic=pred_Topic[['Microblog','Topic_Cat','Topic_Name']]
 #             
 # =============================================================================
-                  st.dataframe(topic_name)
+                  st.write(topic_name)
                     
     
               
