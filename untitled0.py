@@ -877,14 +877,18 @@ def main():
     
   st.title("Covid19za Consortium")
   st.subheader("Analysis and Predictor Models for Covid19 Microblog data ")
-  st.write("This app uses a microblog, twitter data to help identify communication straegy for health and government officials during pandemics in social platforms We use user and microblog content information to predict if a model will Trend  and rate of tranmission of a blog through statistcal distribution approaches, we also further cluster the text between SA and NonSA and determine sentiment betweeen the groups.")
+  st.write("This app uses a microblog, twitter data to help identify communication straegy for health and government officials during pandemics in social platforms. The dataset used contains user, retweet and microblog content information. ")
   
-  st.write('1.Cluster local and international microblogs, and identify similarities between the two clusters.')
-  st.write('2  item Identify spread of information')
-  st.write('3. item Determine sentiment of various groups.')
-    
+  st.write("The app will:")
+  st.write('1. Predict if microblog text is SA or International, and identify sentiment between the two clusters.')
+  st.write('2. Predict influncer status of user')
+  st.write('3. Identify distribution of microblog based on predicted topic')
+  st.write('4. Predict if Microblog will trend.')
+  
+  st.markdown('The first two predictions uses original dataset for predicitons whilst the rest uses the subset   **select data to achieve required prediction**.')  
+  
   st.sidebar.write("SELECT DATA TO USE")
-  data_option=st.sidebar.selectbox("Data Option",("<Select Option>","Full Dataset","Sub Dataset"))
+  data_option=st.sidebar.selectbox("Data Option",("<Select Option>","Original Dataset","Sub Dataset"))
   if data_option=="Full Dataset":
     Full_Data().main_full()
     
