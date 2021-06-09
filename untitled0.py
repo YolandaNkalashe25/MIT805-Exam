@@ -1001,13 +1001,13 @@ class SubSet_Data:
 
                                        
                   cf_lvl=pd.DataFrame(self.Trending_model.predict_proba(sub_data_pred))
-
+                  s_clf=pd.Series(cf_lvl.max(axis=0))
                   pred_cat=pd.DataFrame(pred_cat) 
  
                   pred_cat=pd.DataFrame(data['Microblog_text'])
                   #pred_cat['Confidence Level']=cf_lvl
                   st.write(pred_cat)
-                  st.write(pd.Series(cf_lvl.max(axis=0)))
+                  st.write(s_clf)
                   
                   
 #                   pred_cat['Text']=data['Microblog_text']
