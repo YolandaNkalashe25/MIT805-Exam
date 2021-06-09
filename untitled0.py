@@ -329,7 +329,7 @@ class Full_Data:
         
           #st.sidebar.subheader("Choose")
           
-          
+          img = st.image('wordCloud2.png')
           #st.write(img)
           #data=""
           def load():
