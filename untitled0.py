@@ -1001,13 +1001,18 @@ class SubSet_Data:
 
                                        
                   cf_lvl=pd.DataFrame(self.Trending_model.predict_proba(sub_data_pred))
-                  st.write(cf_lvl)
-#                    
-#                   pred_cat['Pred category']=pred_cat
-#                   pred_cat_T=pd.DataFrame(data['Microblog_text'])
+
+                  pred_cat=pd.DataFrame(pred_cat) 
+ 
+                  pred_cat=pd.DataFrame(data['Microblog_text'])
+                  #pred_cat['Confidence Level']=cf_lvl
+                  st.write(pred_cat)
+                  st.write(max(cf_lvl.iloc[0:1, :]))
+                  
+                  
 #                   pred_cat['Text']=data['Microblog_text']
 #                   pred_cat['Projected Status']=pred_val
-#                   pred_cat['Confidence Level']=cf_lvl
+#                   
 #                    
 #                   st.write('Topic analysis/prediciton:')
 #                   st.write('Topology table')
