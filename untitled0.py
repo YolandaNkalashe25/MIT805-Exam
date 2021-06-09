@@ -699,11 +699,8 @@ class SubSet_Data:
             choice=st.sidebar.selectbox("bulk/single prediction", menu)
             
           
-            Data_file=st.sidebar.file_uploader(label="Upload csv raw file", type=['xlsx'])
-               
-            check1= st.checkbox('Predict')
-            
             if st.checkbox('Generate User & Content Based Feature Table'):
+                   Data_file=st.sidebar.file_uploader(label="Upload csv raw file", type=['xlsx'])
                 
                    st.header("User & Content Based Feature Table Modelling:")
                    st.subheader("Sub-Table based on input data")
