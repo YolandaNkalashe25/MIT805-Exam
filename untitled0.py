@@ -690,21 +690,8 @@ class SubSet_Data:
           
           
           
-          # Title
           
-
-          
-          if choice== "Viaualization/Dashboard":
-              st.subheader("Visuals based on Trained data")
-              
-          else:
-            st.subheader("1. Translate Microblog:")
-          
-            st.subheader("2. Determine SA vs International:")
-          
-            st.subheader("3. User Influencer Status:")
-          
-            st.subheader("User & Content Based Feature Table:")
+            st.header("User & Content Based Feature Table:")
           
           
           
