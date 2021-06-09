@@ -879,7 +879,7 @@ def main():
   st.subheader("Analysis and Predictor Models for Covid19 Microblog data ")
   st.write("This app uses a microblog, twitter data to help identify communication straegy for health and government officials during pandemics in social platforms We use user and microblog content information to predict if a model will Trend  and rate of tranmission of a blog through statistcal distribution approaches, we also further cluster the text between SA and NonSA and determine sentiment betweeen the groups.")
   
-  st.wrie('1.Cluster local and international microblogs, and identify similarities between the two clusters.')
+  st.write('1.Cluster local and international microblogs, and identify similarities between the two clusters.')
   st.write('2  item Identify spread of information')
   st.write('3. item Determine sentiment of various groups.')
     
