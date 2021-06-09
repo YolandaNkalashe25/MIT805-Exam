@@ -692,8 +692,7 @@ class SubSet_Data:
           
           # Title
           
-          pick=["","Viaualization/Dashboard","Prediction"]
-          choice=st.sidebar.selectbox("Menu", pick)
+
           
           if choice== "Viaualization/Dashboard":
               st.subheader("Visuals based on Trained data")
@@ -705,7 +704,7 @@ class SubSet_Data:
           
             st.subheader("3. User Influencer Status:")
           
-            st.subheader("4. User & Content Based Feature Table:")
+            st.subheader("User & Content Based Feature Table:")
           
           
           
@@ -887,13 +886,20 @@ def main():
   
   st.markdown('The first two predictions uses original dataset for predicitons whilst the rest uses the subset   **select data to achieve required prediction**.')  
   
-  st.sidebar.write("SELECT DATA TO USE")
-  data_option=st.sidebar.selectbox("Data Option",("<Select Option>","Original Dataset","Sub Dataset"))
-  if data_option=="Original Dataset":
-    Full_Data().main_full()
+  pick=["","Viaualization/Dashboard","Prediction"]
+  choice=st.sidebar.selectbox("Menu", pick)
+  
+  if choice=='Prediction':
+    st.sidebar.write("SELECT DATA TO USE")
+    data_option=st.sidebar.selectbox("Data Option",("<Select Option>","Original Dataset","Sub Dataset"))
+    if data_option=="Original Dataset":
+        Full_Data().main_full()
     
-  elif data_option=='Sub Dataset':
-     SubSet_Data().main_sub()
+    elif data_option=='Sub Dataset':
+        SubSet_Data().main_sub()
+        
+  else:
+      st.write('Dashboard')
     
 
 if __name__=='__main__':
