@@ -941,25 +941,27 @@ class SubSet_Data:
                  
               Senti=self.Sentiment_url(corpus)
                    
-              Length=len(data['Microblog_text'])
-                   
-              import datetime
-              
-              data['Date_user_created'] =  pd.to_datetime(data['Date_user_created'])
-              data['Date_user_created'] =  pd.to_datetime(data['Date_user_created'],format="%Y-%m-%d")
-                   
-              d1 = data['Date_user_created']
-              Today = datetime.datetime.now()
-
-              diff_Created=(Today - d1.min())
-              DaysActive=diff_Created.days
-              
-              data['Sentiment']=Senti["sentiment"]
-              data['Sentiment_Cat']=Senti["Sentiment_Cat"]
-              data['No_Urls']=Senti["urls"]
-              data['Topic']=pd.DataFrame(Tp, columns={'Topic'})
-              data['Length']=Length
-              data['DaysActive']=DaysActive
+# =============================================================================
+#               Length=len(data['Microblog_text'])
+#                    
+#               import datetime
+#               
+#               data['Date_user_created'] =  pd.to_datetime(data['Date_user_created'])
+#               data['Date_user_created'] =  pd.to_datetime(data['Date_user_created'],format="%Y-%m-%d")
+#                    
+#               d1 = data['Date_user_created']
+#               Today = datetime.datetime.now()
+# 
+#               diff_Created=(Today - d1.min())
+#               DaysActive=diff_Created.days
+#               
+#               data['Sentiment']=Senti["sentiment"]
+#               data['Sentiment_Cat']=Senti["Sentiment_Cat"]
+#               data['No_Urls']=Senti["urls"]
+#               data['Topic']=pd.DataFrame(Tp, columns={'Topic'})
+#               data['Length']=Length
+#               data['DaysActive']=DaysActive
+# =============================================================================
                 
               
               if st.checkbox('Generate User & Content Based Feature Table'):
@@ -986,10 +988,10 @@ class SubSet_Data:
             
               if st.checkbox('Predict hourly rate of transmission'):
                   
-                  pred_cat=self.Trending_model.predict(data)
+                  #pred_cat=self.Trending_model.predict(data)
                   pred_val=[]
                   
-                  st.write(pred_cat)
+                  st.write(data)
 # =============================================================================
 # 
 #                   if pred_cat==0:
