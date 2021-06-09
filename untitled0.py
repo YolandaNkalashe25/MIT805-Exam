@@ -936,32 +936,6 @@ class SubSet_Data:
               
               data = pd.DataFrame([features])
               
-              corpus=data['Microblog_text']
-              Tp=self.Topic_m.predict(data['Microblog_text'])
-                 
-              Senti=self.Sentiment_url(corpus)
-                   
-# =============================================================================
-#               Length=len(data['Microblog_text'])
-#                    
-#               import datetime
-#               
-#               data['Date_user_created'] =  pd.to_datetime(data['Date_user_created'])
-#               data['Date_user_created'] =  pd.to_datetime(data['Date_user_created'],format="%Y-%m-%d")
-#                    
-#               d1 = data['Date_user_created']
-#               Today = datetime.datetime.now()
-# 
-#               diff_Created=(Today - d1.min())
-#               DaysActive=diff_Created.days
-#               
-#               data['Sentiment']=Senti["sentiment"]
-#               data['Sentiment_Cat']=Senti["Sentiment_Cat"]
-#               data['No_Urls']=Senti["urls"]
-#               data['Topic']=pd.DataFrame(Tp, columns={'Topic'})
-#               data['Length']=Length
-#               data['DaysActive']=DaysActive
-# =============================================================================
                 
               
               if st.checkbox('Generate User & Content Based Feature Table'):
@@ -970,6 +944,32 @@ class SubSet_Data:
                                   
                    st.header("User & Content Based Feature Table Modelling:")
                    st.subheader("Sub-Table based on input data")
+                   
+                   corpus=data['Microblog_text']
+                   Tp=self.Topic_m.predict(data['Microblog_text'])
+                 
+                   Senti=self.Sentiment_url(corpus)
+                   
+                   Length=len(data['Microblog_text'])
+                   
+                   import datetime
+              
+                   data['Date_user_created'] =  pd.to_datetime(data['Date_user_created'])
+                   data['Date_user_created'] =  pd.to_datetime(data['Date_user_created'],format="%Y-%m-%d")
+                   
+                   d1 = data['Date_user_created']
+                   Today = datetime.datetime.now()
+
+                   diff_Created=(Today - d1.min())
+                   DaysActive=diff_Created.days
+              
+                   data['Sentiment']=Senti["sentiment"]
+                   data['Sentiment_Cat']=Senti["Sentiment_Cat"]
+                   data['No_Urls']=Senti["urls"]
+                   data['Topic']=pd.DataFrame(Tp, columns={'Topic'})
+                   data['Length']=Length
+                   data['DaysActive']=DaysActive
+
                    
                     
                       
@@ -988,31 +988,28 @@ class SubSet_Data:
             
               if st.checkbox('Predict hourly rate of transmission'):
                   
-                  #pred_cat=self.Trending_model.predict(data)
+                  pred_cat=self.Trending_model.predict(data)
                   pred_val=[]
-                  
-                  st.write(data)
-# =============================================================================
-# 
-#                   if pred_cat==0:
-#                       val='Trending'
-#                       pred_val.append(val)
-#                   else:
-#                       val='Wont Trending'
-#                       pred_val.append(val)
-#                                        
-#                   cf_lvl=pd.DataFrame(self.Trending_model.predict_proba(data))
-# 
-#                   pred_cat_T=pd.DataFrame(data['Microblog_text'])
-#                   pred_cat['Text']=data['Microblog_text']
-#                   pred_cat['Projected Status']=pred_val
-#                   pred_cat['Confidence Level']=cf_lvl[0]
-#                    
-#                   st.write('Topic analysis/prediciton:')
-#                   st.write('Topology table')
-#                   pred_Topic=self.Topic_m.predict(data['Microblog_text'])
-#                   topic_name=[]
-# =============================================================================
+
+                  if pred_cat==0:
+                      val='Trending'
+                      pred_val.append(val)
+                  else:
+                      val='Wont Trending'
+                      pred_val.append(val)
+                                       
+                  cf_lvl=pd.DataFrame(self.Trending_model.predict_proba(data))
+                   
+                  pred_cat['Pred category']=pred_cat[0]
+                  pred_cat_T=pd.DataFrame(data['Microblog_text'])
+                  pred_cat['Text']=data['Microblog_text']
+                  pred_cat['Projected Status']=pred_val
+                  pred_cat['Confidence Level']=cf_lvl[0]
+                   
+                  st.write('Topic analysis/prediciton:')
+                  st.write('Topology table')
+                  pred_Topic=self.Topic_m.predict(data['Microblog_text'])
+                  topic_name=[]
                     
     
               
