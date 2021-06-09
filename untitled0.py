@@ -14,6 +14,7 @@ import streamlit as st
 import altair as alt
 import pickle
 import joblib
+import emoji
 from sklearn import preprocessing
 import pandas as pd # to read csv/excel formatted data
 import matplotlib.pyplot as plt # to plot graphs
@@ -702,7 +703,11 @@ class SubSet_Data:
                
             check1= st.checkbox('Predict')
             
-            if check1:
+            if st.checkbox('Generate User & Content Based Feature Table'):
+                
+                   st.header("User & Content Based Feature Table Modelling:")
+                   st.subheader("Sub-Table based on input data")
+     
                    data=pd.read_excel(Data_file)
 
                    sub_data=self.sub_df(data)
@@ -717,6 +722,10 @@ class SubSet_Data:
                    sub_data['Topic']=pd.DataFrame(Tp, columns={'Topic'})
                  
                    sub_data_pred=sub_data[['number_of_followers','number_of_times_listed','Length','fav_Count','user_verified','status_Count','has_image','DaysActive','Sentiment_Cat','No_Urls','Topic','has_decription']]
+                   
+                   st.dataframe(sub_data_pred)
+                   
+                   st.subheader("Overall Sentiment:")
                    
                    sent=sub_data['Sentiment']
                    face_det=(sent.value_counts()/len(sent))*100
@@ -734,51 +743,55 @@ class SubSet_Data:
                            emoji_=emoji.emojize(':angry_face:')
                            emo.append(emoji_)
                            
-                   pred_cat=pd.DataFrame(Trending_model.predict(sub_data_pred))
-                   pred_val=[]
                    
-                   for i in pred_cat[0]:
-                       if i==0:
-                           val='Trending'
-                           pred_val.append(val)
-                       else:
-                           val='Wont Trending'
-                           pred_val.append(val)
-                       
- 
-                   
-                   cf_lvl=pd.DataFrame(Trending_model.predict_proba(sub_data_pred))
-                   
-                   pred_cat['Pred category']=pred_cat[0]
-                   pred_cat['Text']=sub_data['Microblog_text']
-                   pred_cat['Projected Status']=pred_val
-                   pred_cat['Confidence Level']=cf_lvl[0]
-                   
-                   st.write('Topic analysis/prediciton:')
-                   
-                   st.write(Topic_m.predict(sub_data['Microblog_text']))
- 
-                           
-                 
-                   st.write("User & Content based Table based on input data")
-                   st.dataframe(sub_data_pred)
-                   
-                   st.write("Overall Sentiment:")
          
                    st.write("{}: {} : {}".format("Positive Sentiment" ,str(int(face_det[0]))+'%',emoji.emojize(':grinning_face_with_big_eyes:')))
                    st.write("{}: {} : {}".format("Neutral Sentiment" ,str(int(face_det[1]))+'%',emoji.emojize(':neutral_face:')))
                    st.write("{}: {} : {}".format("Negative Sentiment" ,str(int(face_det[2]))+'%',emoji.emojize(':angry_face:')))
-                                           
-                 
-                   st.write("4.2. Likelihood of microblog trending:") 
-                   
-                 
-                   st.write("Probability split:") 
-                   #
-                   
-                   st.dataframe(pred_cat)
-         
-                 
+                         
+                           
+# =============================================================================
+#                    pred_cat=pd.DataFrame(Trending_model.predict(sub_data_pred))
+#                    pred_val=[]
+#                    
+#                    for i in pred_cat[0]:
+#                        if i==0:
+#                            val='Trending'
+#                            pred_val.append(val)
+#                        else:
+#                            val='Wont Trending'
+#                            pred_val.append(val)
+#                        
+#  
+#                    
+#                    cf_lvl=pd.DataFrame(Trending_model.predict_proba(sub_data_pred))
+#                    
+#                    pred_cat['Pred category']=pred_cat[0]
+#                    pred_cat['Text']=sub_data['Microblog_text']
+#                    pred_cat['Projected Status']=pred_val
+#                    pred_cat['Confidence Level']=cf_lvl[0]
+#                    
+#                    st.write('Topic analysis/prediciton:')
+#                    
+#                    st.write(Topic_m.predict(sub_data['Microblog_text']))
+#  
+#                            
+#                  
+#                    st.write("User & Content based Table based on input data")
+#                    
+#                    
+#                                      
+#                  
+#                    st.write("4.2. Likelihood of microblog trending:") 
+#                    
+#                  
+#                    st.write("Probability split:") 
+#                    #
+#                    
+#                    st.dataframe(pred_cat)
+#          
+#                  
+# =============================================================================
 
             if choice=="Single prediction":
               
