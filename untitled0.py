@@ -1044,8 +1044,80 @@ class SubSet_Data:
                   lamda_T3=[3,3,0,1,3,3,1,1,1,1,1,1,4,1,1,1,6,2,1,1,1,4,1,3,1,1,1,3,1,1,1,1,2,1,1,1,
                       1,4,2,4,1,1,2,3,1,1,1,1,1,1,1,1,3,2,2,1,3,5,3,1,1,1,1,2,3,1,2,1,1,
                       1,2,1]
+                  
+                  
+                  
+                  plt_dist=pd.DataFrame(lamda_T1,index=pd.RangeIndex(72, name='x'))
+                  plt_dist['T1: #Covid']=plt_dist[0]
+                  plt_dist['T2: #Vaccine']=lamda_T2
+                  plt_dist['T3: #SA_Lockdown']=lamda_T3
+                  plt_dist=plt_dist[['T1: #Covid','T2: #Vaccine','T3: #SA_Lockdown']]
+                  plt1=plt_dist[['T1: #Covid']]
+                  plt2=plt_dist[['T2: #Vaccine']]
+                  plt3=plt_dist[['T3: #SA_Lockdown']]
                     
-    
+                  plt1 = plt1.reset_index().melt('x', var_name='category', value_name='y')
+                  
+                  plt1 = plt1.reset_index().melt('x', var_name='category', value_name='y')
+                
+                  line_chart1= alt.Chart(plt1).mark_line(interpolate='basis').encode(
+                          alt.X('x', title='hour'),
+                          alt.Y('y', title='count of retweets'),
+                          color='category:N'
+                          ).properties(
+                           title='Topic1'
+                          )
+
+                
+                  plt2 = plt2.reset_index().melt('x', var_name='category', value_name='y')
+                                
+                  line_chart2= alt.Chart(plt2).mark_line(interpolate='basis').encode(
+                          alt.X('x', title='hour'),
+                          alt.Y('y', title='count of retweets'),
+                          color='category:N'
+                          ).properties(
+                           title='Topic2'
+                          )
+
+                
+            
+                  plt3 = plt3.reset_index().melt('x', var_name='category', value_name='y')
+                                                
+                  line_chart3= alt.Chart(plt3).mark_line(interpolate='basis').encode(
+                          alt.X('x', title='hour'),
+                          alt.Y('y', title='count of retweets'),
+                          color='category:N'
+                          ).properties(
+                           title='Topic3'
+                          )   
+                              
+                  plt_dist = plt_dist.reset_index().melt('x', var_name='category', value_name='y') 
+                  line_chart = alt.Chart(plt_dist).mark_line(interpolate='basis').encode(
+                          alt.X('x', title='hour'),
+                          alt.Y('y', title='count of retweets'),
+                          color='category:N'
+                          ).properties(
+                           title='retweet count distribution in the first 72hours')
+                              
+                
+                  st.subheader("Individual Distrubtion plot")
+                
+                  if pred_Topic==1:
+                       st.subheader("Topic1 Distrubtion plot")
+                       st.altair_chart(line_chart1,use_container_width=True)
+            
+                  if pred_Topic==2:
+                       st.subheader("Topic2 Distrubtion plot")
+                       st.altair_chart(line_chart2,use_container_width=True)
+                
+                  if pred_Topic==3:
+                       st.subheader("Topic3 Distrubtion plot")
+                       st.altair_chart(line_chart2,use_container_width=True)    
+                       
+                  st.subheader('Get probability of retweet count based on topic.')
+               
+         
+     
               
 # =============================================================================
 #               if st.button('Predict'):
