@@ -1010,7 +1010,7 @@ class SubSet_Data:
                     
                   st.write('Topic analysis/prediciton:')
                   st.write('Topology table')
-                  pred_Topic=self.Topic_m.predict(Microblog_text)
+                  pred_Topic=self.Topic_m.predict(data['Microblog_text'])
                   topic_name=""
                   
 
