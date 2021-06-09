@@ -889,7 +889,7 @@ def main():
   
   st.sidebar.write("SELECT DATA TO USE")
   data_option=st.sidebar.selectbox("Data Option",("<Select Option>","Original Dataset","Sub Dataset"))
-  if data_option=="Full Dataset":
+  if data_option=="Original Dataset":
     Full_Data().main_full()
     
   elif data_option=='Sub Dataset':
