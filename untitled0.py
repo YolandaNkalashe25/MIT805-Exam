@@ -945,7 +945,7 @@ class SubSet_Data:
                   
     
                    corpus=sub_data['Microblog_text']
-                   Tp=self.Topic_num(corpus)
+                   Tp=self.Topic_m.predict(sub_data['Microblog_text'])
                  
                    Senti=self.Sentiment_url(corpus)
                    
