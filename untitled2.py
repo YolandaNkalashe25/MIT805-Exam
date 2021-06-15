@@ -1241,9 +1241,9 @@ class Dash:
                   data_processed=Full_Data().preprocess(data)
 
                   #fin_data=Full_Data().
-                  size=len(data_processed['statuses_retweeted_status_id'].unique())
-                  st.markdown('<p class="big-font">Count of unique tweets</p>', unsafe_allow_html=True)
-                  st.write(size)
+                  #size=len(data_processed['statuses_retweeted_status_id'].unique())
+                  #st.markdown('<p class="big-font">Count of unique tweets</p>', unsafe_allow_html=True)
+                  #st.write(size)
                   
                   st.write(data_processed.head())
                   
