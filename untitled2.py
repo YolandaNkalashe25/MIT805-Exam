@@ -1241,7 +1241,7 @@ class Dash:
                   data_processed=Full_Data().preprocess(data)
 
                   #fin_data=Full_Data().
-                  size=len(data['statuses_retweeted_status_id'].unique())
+                  size=len(data_processed['statuses_retweeted_status_id'].unique())
                   st.markdown('<p class="big-font">Count of unique tweets</p>', unsafe_allow_html=True)
                   st.write(size)
                   
@@ -1282,6 +1282,7 @@ class Dash:
                    categorise=categorise.tolist()
                    df_class=pd.DataFrame(categorise,columns=["Class_Label"])
                    df_class=df_class.reset_index(drop=True)
+                   import numpy as np
                    df_class['Tweet_Category'] = np.where((df_class['Class_Label'] ==0), 'Global Tweet', 'S.A Tweet')
                    df_cat=pd.concat([clean_cat,df_class],axis=1)
                    st.write('**SA vs Global Bar Graph**')
@@ -1334,7 +1335,7 @@ class Dash:
                   #from json import loads
           
           
-                  vis = '/Users/yolandankalashe/Desktop/Deployment/App/output_lda.html'
+                  vis = 'https://github.com/YolandaNkalashe25/MIT805-Exam/blob/main/output_lda.html?raw=true'
                   #vis=loads(vis)
           
                   import os
@@ -1379,7 +1380,7 @@ class Dash:
                       return X_pca, cluster_labels
                       
                   num_clusters=st.slider('Number of unsupervised clusters',min_value=3, max_value=10,step=1)
-                  Document=data.statuses_text
+                  Document=data_processed.statuses_text
                   X_pca, cluster_labels=cluster(Document,num_clusters)
             
                   import matplotlib.pyplot as plt
