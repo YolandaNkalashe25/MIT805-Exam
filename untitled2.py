@@ -1335,22 +1335,28 @@ class Dash:
                   #from json import loads
           
           
-                  vis = 'https://htmlpreview.github.io/?https://github.com/YolandaNkalashe25/MIT805-Exam/blob/main/output_lda.html'
+                  url = 'https://htmlpreview.github.io/?https://github.com/YolandaNkalashe25/MIT805-Exam/blob/main/output_lda.html'
                   #vis=loads(vis)
+                  import webbrowser
+                  if st.button('Open browser'):
+                    webbrowser.open_new_tab(url)
+
           
-                  import os
-                  import base64
-                  def get_binary_file_downloader_html(bin_file, file_label='File'):
-                    with open(bin_file, 'rb') as f:
-                     data = f.read()
-                     bin_str = base64.b64encode(data).decode()
-                     href = f'<a href="data:application/octet-stream;base64,{bin_str}" download="{os.path.basename(bin_file)}">Download {file_label}</a>'
-                     return href
-                 
-    
-                  st.markdown(get_binary_file_downloader_html(vis, 'Interactive Topic saliency plot'), unsafe_allow_html=True)
-                  #cat_check=st.checkbox("Generate SA vs Global Bar Graph",value = False)
-                  #if cat_check:
+# =============================================================================
+#                   import os
+#                   import base64
+#                   def get_binary_file_downloader_html(bin_file, file_label='File'):
+#                     with open(bin_file, 'rb') as f:
+#                      data = f.read()
+#                      bin_str = base64.b64encode(data).decode()
+#                      href = f'<a href="data:application/octet-stream;base64,{bin_str}" download="{os.path.basename(bin_file)}">Download {file_label}</a>'
+#                      return href
+#                  
+#     
+#                   st.markdown(get_binary_file_downloader_html(vis, 'Interactive Topic saliency plot'), unsafe_allow_html=True)
+#                   #cat_check=st.checkbox("Generate SA vs Global Bar Graph",value = False)
+#                   #if cat_check:
+# =============================================================================
                   
                 my_expander_Text_inter = st.beta_expander("Interactive Text Analytics", expanded=True)
                 with my_expander_Text_inter:   
