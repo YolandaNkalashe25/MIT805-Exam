@@ -1335,7 +1335,7 @@ class Dash:
                   #from json import loads
           
           
-                  vis = 'https://github.com/YolandaNkalashe25/MIT805-Exam/blob/main/output_lda.html?raw=true'
+                  vis = 'https://github.com/YolandaNkalashe25/MIT805-Exam/blob/main/output_lda.html'
                   #vis=loads(vis)
           
                   import os
