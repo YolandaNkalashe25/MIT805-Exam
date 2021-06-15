@@ -53,7 +53,7 @@ nltk.download('wordnet')
 from nltk.corpus import stopwords
 class Full_Data:
       # Data Pre-processing
-
+      @st.cache(suppress_st_warning=True)
       def preprocess(self,data_heading):
         null_dict={}
         nulls_all=data_heading.isnull().sum().to_frame()
@@ -153,6 +153,7 @@ class Full_Data:
         return df_normal1.iloc[:,:5] #best_model_xgb
 
       #SA and Global Category Data cleaning
+      @st.cache(suppress_st_warning=True)
       def CategoriseSA(self,Final_Dataset):
         Final_Dataset['statuses_text'] = Final_Dataset['statuses_text'].str.lower()
         Categorisation_dataset=Final_Dataset[(Final_Dataset['input_query']!='nfsas') & (Final_Dataset['input_query']!='#openthechurches')]
@@ -232,7 +233,8 @@ class Full_Data:
         Data_Models['clean_text']=df_lem['clean_text']
 
         return  Data_Models #best_model
-
+    
+      @st.cache(suppress_st_warning=True)
       def clean_text(self,text):
         documents = []
         from nltk.stem import WordNetLemmatizer
@@ -265,6 +267,7 @@ class Full_Data:
 
 
       #Sentiment Analysis
+      @st.cache(suppress_st_warning=True)
       def Sent(self,Data_Models):
         from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
         analyser = SentimentIntensityAnalyzer()
@@ -295,6 +298,8 @@ class Full_Data:
           return text_Sent_SA, text_Sent_GL,Df_sent
         else: 
           return Df_sent["sentiment_class"].loc[0]
+      
+      @st.cache(suppress_st_warning=True)
       def csv_downloader(self,data):
             dateTimeObj = datetime.now()
             timeStr = dateTimeObj.strftime("%H:%M:%S.%f")
@@ -304,7 +309,8 @@ class Full_Data:
             st.markdown("#### Download File ###")
             href = f'<a href="data:file/csv;base64,{b64}" download="{new_filename}">Click Here!!</a>'
             st.markdown(href,unsafe_allow_html=True)
-
+            
+      @st.cache(suppress_st_warning=True)
       def main_full(self):
           import streamlit as st       
           # front end elements of the web page 
@@ -534,7 +540,8 @@ class Full_Data:
                              y = p.get_y()+(height/2),
                              s = "{:.0f}".format(width), 
                              va = "center")
-                          st.pyplot()
+
+
 def preprocess_text(text):
           # Tokenise words while ignoring punctuation
           tokeniser = RegexpTokenizer(r'\w+')
@@ -550,7 +557,8 @@ def preprocess_text(text):
                                 
 
 class SubSet_Data:
-    
+      
+      @st.cache(suppress_st_warning=True)
       def preprocess_text(self,text):
           # Tokenise words while ignoring punctuation
           tokeniser = RegexpTokenizer(r'\w+')
@@ -563,7 +571,8 @@ class SubSet_Data:
           # Remove stop words
           keywords= [lemma for lemma in lemmas if lemma not in stopwords.words('english')]
           return keywords
-
+      
+      @st.cache(suppress_st_warning=True)
       def sub_df(self,data):
           data['statuses_retweeted_status_user_created_at'] =  pd.to_datetime(data['statuses_retweeted_status_user_created_at'])
           data['statuses_retweeted_status_user_created_at'] =  pd.to_datetime(data['statuses_retweeted_status_user_created_at'],format="%Y-%m-%d")
@@ -635,7 +644,7 @@ class SubSet_Data:
           
           return MicroblogText_df
           
-
+      @st.cache(suppress_st_warning=True)
       def Topic_num(self,corpus_df):
           corpus_df=corpus_df.to_list()
           Topic_ls=[]
@@ -681,6 +690,7 @@ class SubSet_Data:
           url = re.findall(regex,string)      
           return len(url)
 
+      @st.cache(suppress_st_warning=True)
       def Sentiment_url(self,corpus_df):
           import vaderSentiment
           from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer   
@@ -737,7 +747,7 @@ class SubSet_Data:
 
 
 
-
+      @st.cache(suppress_st_warning=True)
       def main_sub(self):
           
           
@@ -1214,10 +1224,13 @@ class SubSet_Data:
 
                        st.dataframe(pred_cat)
 class Dash:
-    
+      
+      @st.cache(suppress_st_warning=True)
       def dash_full(self):
                 
                 def Bulk_data(data_load):
+                    
+                    import matplotlib.pyplot as plt
                     if data_load is not None:
                         #data = pd.read_excel(data_load)
                         Label_list=['input_query','statuses_created_at','statuses_id','statuses_text','statuses_truncated','statuses_entities_user_mentions[0]_screen_name','statuses_entities_user_mentions[0]_name','statuses_entities_user_mentions[0]_id','statuses_entities_user_mentions[0]_id_str','statuses_entities_user_mentions[0]_indices[0]','statuses_metadata_iso_language_code','statuses_metadata_result_type','statuses_source','statuses_in_reply_to_status_id','statuses_in_reply_to_status_id_str','statuses_in_reply_to_user_id','statuses_in_reply_to_user_id_str','statuses_in_reply_to_screen_name','statuses_user_id','statuses_user_id_str','statuses_user_name','statuses_user_screen_name','statuses_user_location','statuses_user_description','statuses_user_url','statuses_user_entities_url_urls[0]_url','statuses_user_entities_url_urls[0]_expanded_url','statuses_user_entities_url_urls[0]_display_url','statuses_user_entities_url_urls[0]_indices[0]','statuses_user_entities_description_urls[0]_url','statuses_user_entities_description_urls[0]_expanded_url','statuses_user_entities_description_urls[0]_display_url','statuses_user_entities_description_urls[0]_indices[0]','statuses_user_protected','statuses_user_followers_count','statuses_user_friends_count','statuses_user_listed_count','statuses_user_created_at','statuses_user_favourites_count','statuses_user_statuses_count','statuses_user_profile_background_color','statuses_user_profile_background_image_url','statuses_user_profile_background_image_url_https','statuses_user_profile_background_tile','statuses_user_profile_image_url','statuses_user_profile_image_url_https','statuses_user_profile_banner_url','statuses_user_profile_link_color','statuses_user_profile_sidebar_border_color','statuses_user_profile_sidebar_fill_color','statuses_user_profile_text_color','statuses_user_profile_use_background_image','statuses_user_has_extended_profile','statuses_user_default_profile','statuses_user_default_profile_image','statuses_retweeted_status_created_at','statuses_retweeted_status_id','statuses_retweeted_status_id_str','statuses_retweeted_status_text','statuses_retweeted_status_truncated','statuses_retweeted_status_entities_urls[0]_url','statuses_retweeted_status_entities_urls[0]_expanded_url','statuses_retweeted_status_entities_urls[0]_display_url','statuses_retweeted_status_entities_urls[0]_indices[0]','statuses_retweeted_status_metadata_iso_language_code','statuses_retweeted_status_metadata_result_type','statuses_retweeted_status_source','statuses_retweeted_status_user_id','statuses_retweeted_status_user_id_str','statuses_retweeted_status_user_name','statuses_retweeted_status_user_screen_name','statuses_retweeted_status_user_location','statuses_retweeted_status_user_description','statuses_retweeted_status_user_url','statuses_retweeted_status_user_entities_url_urls[0]_url','statuses_retweeted_status_user_entities_url_urls[0]_expanded_url','statuses_retweeted_status_user_entities_url_urls[0]_display_url','statuses_retweeted_status_user_entities_url_urls[0]_indices[0]','statuses_retweeted_status_user_protected','statuses_retweeted_status_user_followers_count','statuses_retweeted_status_user_friends_count','statuses_retweeted_status_user_listed_count','statuses_retweeted_status_user_created_at','statuses_retweeted_status_user_favourites_count','statuses_retweeted_status_user_utc_offset','statuses_retweeted_status_user_verified','statuses_retweeted_status_user_statuses_count','statuses_retweeted_status_user_contributors_enabled','statuses_retweeted_status_user_is_translator','statuses_retweeted_status_user_is_translation_enabled','statuses_retweeted_status_user_profile_background_color','statuses_retweeted_status_user_profile_background_image_url','statuses_retweeted_status_user_profile_background_image_url_https','statuses_retweeted_status_user_profile_background_tile','statuses_retweeted_status_user_profile_image_url','statuses_retweeted_status_user_profile_image_url_https','statuses_retweeted_status_user_profile_banner_url','statuses_retweeted_status_user_profile_link_color','statuses_retweeted_status_user_profile_sidebar_border_color','statuses_retweeted_status_user_profile_sidebar_fill_color','statuses_retweeted_status_user_profile_text_color','statuses_retweeted_status_user_profile_use_background_image','statuses_retweeted_status_user_has_extended_profile','statuses_retweeted_status_user_default_profile','statuses_retweeted_status_user_default_profile_image','statuses_retweeted_status_retweet_count','statuses_retweeted_status_favorite_count','statuses_retweeted_status_favorited','statuses_retweeted_status_retweeted','statuses_retweeted_status_possibly_sensitive','statuses_retweeted_status_lang','statuses_is_quote_status',	'statuses_retweet_count',	'statuses_favorite_count','statuses_favorited',	'statuses_retweeted','statuses_lang']
@@ -1234,27 +1247,37 @@ class Dash:
                 else:
                   st.subheader("Visuals based on Trained data")
                    #Full_Data().main_full()
-
-
+                   
                   data=Bulk_data(Data_file)
 
                   data_processed=Full_Data().preprocess(data)
 
-                  #fin_data=Full_Data().
                   #size=len(data_processed['statuses_retweeted_status_id'].unique())
                   #st.markdown('<p class="big-font">Count of unique tweets</p>', unsafe_allow_html=True)
                   #st.write(size)
                   
                   st.write(data_processed.head())
-                  
-                  #hashbar = st.checkbox("Generate hashtags vs Topics",value = False)
-                  #if hashbar:
-                  my_expander = st.beta_expander("Show Category and SA Catogory visual", expanded=True)
-                  with my_expander:
+
+                  #my_expander = st.beta_expander("Show Category and SA Catogory visual", expanded=True)
+                  #with my_expander:
+                  if st.checkbox('Show Category and SA Catogory visual'):    
  
                    st.subheader( "**Hash_Tags vs Topics Bar Graph**") 
-                    
                    sns.set(rc={"figure.figsize":(10,5)})
+                   def hastag(row):
+                      if(row['input_query']=='vaccine AND "South Africa"' or row['input_query']=='#vaccineSA' or row['input_query']=='#covidvaccine' or row['input_query']=='#VaccineforSouthAfrica' or row['input_query']=='#VaccineRolloutSA' or row['input_query']=='vaccine' ):
+                        val="#T_Vaccine"
+                      elif(row['input_query']=='"South Africa"' or row['input_query']=='#southafrica' or row['input_query']=='#SAlockdown'):  
+                        val="#T_SA"
+                      elif(row['input_query']=='Covid' or row['input_query']=='covid' or row['input_query']=='#openthechurches'):  
+                        val="#T_Covid19"
+                      else:
+                        val="Other"
+        
+                      return val
+                   
+                   data_processed['input_query']=data_processed.apply(hastag,axis=1)
+                   
                    ax = sns.countplot(y="input_query", data=data_processed)
  
                    for p in ax.patches:
@@ -1264,12 +1287,7 @@ class Dash:
                          y = p.get_y()+(height/2),
                          s = "{:.0f}".format(width), 
                          va = "center")
-                         st.pyplot()   
-                    
-                   #wordclo = st.checkbox("Generate WordCloud",value = False)
-                   #if wordclo:
-                   from wordcloud import WordCloud
-                   import matplotlib.pyplot as plt
+                   st.pyplot()   
                   
                    def Cat_Model():
                             import joblib
@@ -1282,7 +1300,9 @@ class Dash:
                    categorise=categorise.tolist()
                    df_class=pd.DataFrame(categorise,columns=["Class_Label"])
                    df_class=df_class.reset_index(drop=True)
+                   
                    import numpy as np
+                   
                    df_class['Tweet_Category'] = np.where((df_class['Class_Label'] ==0), 'Global Tweet', 'S.A Tweet')
                    df_cat=pd.concat([clean_cat,df_class],axis=1)
                    st.write('**SA vs Global Bar Graph**')
@@ -1296,10 +1316,12 @@ class Dash:
                              y = p.get_y()+(height/2),
                              s = "{:.0f}".format(width), 
                              va = "center")
-                             st.pyplot()
+                   st.pyplot()
                       
-                my_expander_Text = st.beta_expander("Show Text Analytics", expanded=True)
-                with my_expander_Text:
+                #my_expander_Text = st.beta_expander("Show Text Analytics", expanded=True)
+                #with my_expander_Text:
+                if st.checkbox('Show Text Analytics'):   
+                  from wordcloud import WordCloud
                   st.subheader("**Tweets WordCloud**")
                   data_processed_text=Full_Data().clean_text(data_processed.statuses_text)
   
@@ -1331,10 +1353,7 @@ class Dash:
                      image = Image.open('Topic0.jpg')
                      st.image(image, caption='Topic 3 most used words')
             
-          
-                  #from json import loads
-          
-          
+
                   url = 'https://htmlpreview.github.io/?https://github.com/YolandaNkalashe25/MIT805-Exam/blob/main/output_lda.html'
                   #vis=loads(vis)
                   import webbrowser
@@ -1358,8 +1377,10 @@ class Dash:
 #                   #if cat_check:
 # =============================================================================
                   
-                my_expander_Text_inter = st.beta_expander("Interactive Text Analytics", expanded=True)
-                with my_expander_Text_inter:   
+                #my_expander_Text_inter = st.beta_expander("Interactive Text Analytics", expanded=True)
+                #with my_expander_Text_inter:  
+                if st.checkbox('nteractive Text Analytics'): 
+                    
                   st.subheader('Interactive Unsupervised Learning on Microblogs')
                   import emoji
                   from sklearn.cluster import KMeans
