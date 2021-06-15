@@ -1216,6 +1216,7 @@ class SubSet_Data:
 class Dash:
     
       def dash_full(self):
+                
                 def Bulk_data(data_load):
                     if data_load is not None:
                         #data = pd.read_excel(data_load)
@@ -1248,9 +1249,10 @@ class Dash:
                   
                   #hashbar = st.checkbox("Generate hashtags vs Topics",value = False)
                   #if hashbar:
-                  col1,col2 = st.beta_columns([2,2])
-                  with col1:
-                   st.write( "**Hash_Tags vs Topics Bar Graph**") 
+                  my_expander = st.beta_expander("Show Category and SA Catogory visual", expanded=True)
+                  with my_expander:
+ 
+                   st.subheader( "**Hash_Tags vs Topics Bar Graph**") 
                     
                    sns.set(rc={"figure.figsize":(10,5)})
                    ax = sns.countplot(y="input_query", data=data_processed)
@@ -1264,29 +1266,29 @@ class Dash:
                          va = "center")
                          st.pyplot()   
                     
-                  #wordclo = st.checkbox("Generate WordCloud",value = False)
-                  #if wordclo:
+                   #wordclo = st.checkbox("Generate WordCloud",value = False)
+                   #if wordclo:
                    from wordcloud import WordCloud
                    import matplotlib.pyplot as plt
-                  with col2:
-                      def Cat_Model():
+                  
+                   def Cat_Model():
                             import joblib
                             pred_model = joblib.load('classifier_SACat.pkl.pkl')
                             return pred_model
                         
-                      clean_cat=Full_Data().CategoriseSA(data_processed)
-                      pred_model=Cat_Model() 
-                      categorise=pred_model.predict(clean_cat.statuses_without_stopwords)
-                      categorise=categorise.tolist()
-                      df_class=pd.DataFrame(categorise,columns=["Class_Label"])
-                      df_class=df_class.reset_index(drop=True)
-                      df_class['Tweet_Category'] = np.where((df_class['Class_Label'] ==0), 'Global Tweet', 'S.A Tweet')
-                      df_cat=pd.concat([clean_cat,df_class],axis=1)
-                      st.write('**SA vs Global Bar Graph**')
+                   clean_cat=Full_Data().CategoriseSA(data_processed)
+                   pred_model=Cat_Model() 
+                   categorise=pred_model.predict(clean_cat.statuses_without_stopwords)
+                   categorise=categorise.tolist()
+                   df_class=pd.DataFrame(categorise,columns=["Class_Label"])
+                   df_class=df_class.reset_index(drop=True)
+                   df_class['Tweet_Category'] = np.where((df_class['Class_Label'] ==0), 'Global Tweet', 'S.A Tweet')
+                   df_cat=pd.concat([clean_cat,df_class],axis=1)
+                   st.write('**SA vs Global Bar Graph**')
                           
-                      ax = sns.countplot(y="Tweet_Category", data=df_cat)
+                   ax = sns.countplot(y="Tweet_Category", data=df_cat)
 
-                      for p in ax.patches:
+                   for p in ax.patches:
                              height = p.get_height() 
                              width = p.get_width() 
                              ax.text(x = width+3, 
@@ -1295,23 +1297,120 @@ class Dash:
                              va = "center")
                              st.pyplot()
                       
-                  st.write("**Tweets WordCloud**")
+                my_expander_Text = st.beta_expander("Show Text Analytics", expanded=True)
+                with my_expander_Text:
+                  st.subheader("**Tweets WordCloud**")
                   data_processed_text=Full_Data().clean_text(data_processed.statuses_text)
-
-                     
+  
                   st.set_option('deprecation.showPyplotGlobalUse',False)  
                   text=" ".join(clean_text for clean_text in data_processed_text.clean_text)
                   wordcloud = WordCloud(max_words=100).generate(text)
 
-# Display the generated image:
+                  # Display the generated image:
                   plt.imshow(wordcloud, interpolation='bilinear')
                   plt.axis("off")
                   plt.title('Prevalent words in Tweets')
                   plt.show()
                   st.pyplot() 
                   
+                  from PIL import Image
+                  st.subheader('Visual common words in each topic')
+                  st.write('The below visual shows the top salinent words in each topic. To have the interactive plot please click on link below visual')
+                  t_num=st.slider('Show most common words in each topic',max_value=3)
+                  if t_num==1:
+                      image = Image.open('Topic 2.jpg')
+                      st.image(image, caption='Topic 1 most used words')
+                  elif t_num==2:
+                      image = Image.open('Topic3.jpg')
+                      st.image(image, caption='Topic 2 most used words')
+                  elif t_num==3:
+                      image = Image.open('Topic1.jpg')
+                      st.image(image, caption='Topic 3 most used words')
+                  else:
+                     image = Image.open('Topic0.jpg')
+                     st.image(image, caption='Topic 3 most used words')
+            
+          
+                  #from json import loads
+          
+          
+                  vis = '/Users/yolandankalashe/Desktop/Deployment/App/output_lda.html'
+                  #vis=loads(vis)
+          
+                  import os
+                  import base64
+                  def get_binary_file_downloader_html(bin_file, file_label='File'):
+                    with open(bin_file, 'rb') as f:
+                     data = f.read()
+                     bin_str = base64.b64encode(data).decode()
+                     href = f'<a href="data:application/octet-stream;base64,{bin_str}" download="{os.path.basename(bin_file)}">Download {file_label}</a>'
+                     return href
+                 
+    
+                  st.markdown(get_binary_file_downloader_html(vis, 'Interactive Topic saliency plot'), unsafe_allow_html=True)
                   #cat_check=st.checkbox("Generate SA vs Global Bar Graph",value = False)
                   #if cat_check:
+                  
+                my_expander_Text_inter = st.beta_expander("Interactive Text Analytics", expanded=True)
+                with my_expander_Text_inter:   
+                  st.subheader('Interactive Unsupervised Learning on Microblogs')
+                  import emoji
+                  from sklearn.cluster import KMeans
+                  from sklearn.cluster import MiniBatchKMeans
+                  from sklearn.decomposition import PCA
+                  from sklearn.manifold import TSNE
+                  
+                  def cluster(Document, n_clusters):
+                      vectorizer_tfidf = TfidfVectorizer(stop_words='english')
+                      vectorizer_tfidf.fit(Document)
+                      X_tfidf = vectorizer_tfidf.transform(Document)
+    
+                      tfidf_feature_names = vectorizer_tfidf.get_feature_names()
+    
+                      pca=PCA(n_components=2)
+                      X_pca=pca.fit_transform(X_tfidf.toarray())
+    
+                      clf=MiniBatchKMeans(n_clusters=n_clusters,compute_labels=True)
+                      clf.fit(X_tfidf)
+                      within_cluster=clf.inertia_
+    
+                      cluster_labels = clf.predict(X_tfidf)
+    
+                      return X_pca, cluster_labels
+                      
+                  num_clusters=st.slider('Number of unsupervised clusters',min_value=3, max_value=10,step=1)
+                  Document=data.statuses_text
+                  X_pca, cluster_labels=cluster(Document,num_clusters)
+            
+                  import matplotlib.pyplot as plt
+                  import numpy as np
+                  
+                  fig = plt.figure()
+                  ax=fig.add_subplot(projection='3d')
+
+                  # Plot scatterplot data (20 2D points per colour) on the x and z axes.
+                  colors = ('r', 'g', 'b', 'k')
+
+                  # Fixing random state for reproducibility
+                  np.random.seed(19680801)
+
+                  x = X_pca[:,0]
+                  y = X_pca[:,1]
+                  
+                  scatter=ax.scatter(x, y, zs=0, zdir='y', c=cluster_labels, label='points in (x, z)')
+                  
+                  ax.legend()
+                  ax.set_xlabel('X')
+                  ax.set_ylabel('Y')
+                  ax.set_zlabel('Z')
+                  legend1 = ax.legend(*scatter.legend_elements(),
+                     loc="lower left")
+                  ax.add_artist(legend1)
+                  
+                  st.write(fig)
+              
+        
+
                         
 
 def main():
