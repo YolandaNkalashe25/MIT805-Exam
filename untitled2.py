@@ -1,17 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Created on Mon Jun 14 18:03:28 2021
 
-@author: yolandankalashe
-"""
-
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Jun  9 06:56:21 2021
-@author: yolandankalashe
-"""
 
 # -*- coding: utf-8 -*-
 
@@ -764,8 +753,12 @@ class SubSet_Data:
             
             if choice=='Bulk prediction':
                 Data_file=st.sidebar.file_uploader(label="Upload csv raw file", type=['xlsx'])
-                
-                if st.checkbox('Generate User & Content Based Feature Table'):
+                if Data_file is None:
+                    st.warning("One of your playlist URIs was not entered properly")
+                    st.stop()
+                else:
+                    
+                 if st.checkbox('Generate User & Content Based Feature Table'):
                    
                 
                    st.header("User & Content Based Feature Table Modelling:")
@@ -812,7 +805,7 @@ class SubSet_Data:
                    st.write("{}:{}".format("Neutral Sentiment"+ emoji.emojize(':neutral_face:') ,str(int(face_det[1]))+'%'))
                    st.write("{}:{}".format("Negative Sentiment"+emoji.emojize(':angry_face:') ,str(int(face_det[2]))+'%'))
                          
-                if st.checkbox('Predict hourly rate of transmission'):
+                   if st.checkbox('Predict hourly rate of transmission'):
                     
                     pred_cat=pd.DataFrame(self.Trending_model.predict(sub_data_pred))
                     pred_val=[]
@@ -1221,6 +1214,7 @@ class SubSet_Data:
 
                        st.dataframe(pred_cat)
 class Dash:
+    
       def dash_full(self):
                 def Bulk_data(data_load):
                     if data_load is not None:
@@ -1229,7 +1223,8 @@ class Dash:
                         data_load.columns=Label_list
                         #predata=self.preprocess(data)  
                         return data_load
-                url="https://github.com/AndaniMadodonga/Test/blob/main/Tweetdatatest%20-%20Copy.xlsx?raw=true"
+                url='https://github.com/YolandaNkalashe25/MIT805-Exam/blob/main/EDA_sample4%20(1).xlsx?raw=true'
+                #url="https://github.com/AndaniMadodonga/Test/blob/main/Tweetdatatest%20-%20Copy.xlsx?raw=true"
                 
                 Data_file = pd.read_excel(url)
                 
@@ -1245,67 +1240,79 @@ class Dash:
                   data_processed=Full_Data().preprocess(data)
 
                   #fin_data=Full_Data().
+                  size=len(data['statuses_retweeted_status_id'].unique())
+                  st.markdown('<p class="big-font">Count of unique tweets</p>', unsafe_allow_html=True)
+                  st.write(size)
+                  
                   st.write(data_processed.head())
-                  hashbar = st.checkbox("Generate hashtags vs Topics",value = False)
-                  if hashbar:
-                    st.write( "**Hash_Tags vs Topics Bar Graph**") 
+                  
+                  #hashbar = st.checkbox("Generate hashtags vs Topics",value = False)
+                  #if hashbar:
+                  col1,col2 = st.beta_columns([2,2])
+                  with col1:
+                   st.write( "**Hash_Tags vs Topics Bar Graph**") 
                     
-                    sns.set(rc={"figure.figsize":(10,5)})
-                    ax = sns.countplot(y="input_query", data=data_processed)
+                   sns.set(rc={"figure.figsize":(10,5)})
+                   ax = sns.countplot(y="input_query", data=data_processed)
  
-                    for p in ax.patches:
+                   for p in ax.patches:
                          height = p.get_height() 
                          width = p.get_width() 
                          ax.text(x = width+3, 
                          y = p.get_y()+(height/2),
                          s = "{:.0f}".format(width), 
                          va = "center")
-                    st.pyplot()   
+                         st.pyplot()   
                     
-                  wordclo = st.checkbox("Generate WordCloud",value = False)
-                  if wordclo:
-                     from wordcloud import WordCloud
-                     import matplotlib.pyplot as plt
-                     st.write("**Tweets WordCloud**")
-                     data_processed_text=Full_Data().clean_text(data_processed.statuses_text)
-
-                     
-                     st.set_option('deprecation.showPyplotGlobalUse',False)  
-                     text=" ".join(clean_text for clean_text in data_processed_text.clean_text)
-                     wordcloud = WordCloud(max_words=100).generate(text)
-
-# Display the generated image:
-                     plt.imshow(wordcloud, interpolation='bilinear')
-                     plt.axis("off")
-                     plt.title('Prevalent words in Tweets')
-                     plt.show()
-                     st.pyplot() 
-                  cat_check=st.checkbox("Generate SA vs Global Bar Graph",value = False)
-                  if cat_check:
-                        def Cat_Model():
+                  #wordclo = st.checkbox("Generate WordCloud",value = False)
+                  #if wordclo:
+                   from wordcloud import WordCloud
+                   import matplotlib.pyplot as plt
+                  with col2:
+                      def Cat_Model():
                             import joblib
                             pred_model = joblib.load('classifier_SACat.pkl.pkl')
                             return pred_model
-                        clean_cat=Full_Data().CategoriseSA(data_processed)
-                        pred_model=Cat_Model() 
-                        categorise=pred_model.predict(clean_cat.statuses_without_stopwords)
-                        categorise=categorise.tolist()
-                        df_class=pd.DataFrame(categorise,columns=["Class_Label"])
-                        df_class=df_class.reset_index(drop=True)
-                        df_class['Tweet_Category'] = np.where((df_class['Class_Label'] ==0), 'Global Tweet', 'S.A Tweet')
-                        df_cat=pd.concat([clean_cat,df_class],axis=1)
-                        st.write('**SA vs Global Bar Graph**')
+                        
+                      clean_cat=Full_Data().CategoriseSA(data_processed)
+                      pred_model=Cat_Model() 
+                      categorise=pred_model.predict(clean_cat.statuses_without_stopwords)
+                      categorise=categorise.tolist()
+                      df_class=pd.DataFrame(categorise,columns=["Class_Label"])
+                      df_class=df_class.reset_index(drop=True)
+                      df_class['Tweet_Category'] = np.where((df_class['Class_Label'] ==0), 'Global Tweet', 'S.A Tweet')
+                      df_cat=pd.concat([clean_cat,df_class],axis=1)
+                      st.write('**SA vs Global Bar Graph**')
                           
-                        ax = sns.countplot(y="Tweet_Category", data=df_cat)
+                      ax = sns.countplot(y="Tweet_Category", data=df_cat)
 
-                        for p in ax.patches:
+                      for p in ax.patches:
                              height = p.get_height() 
                              width = p.get_width() 
                              ax.text(x = width+3, 
                              y = p.get_y()+(height/2),
                              s = "{:.0f}".format(width), 
                              va = "center")
-                        st.pyplot()
+                             st.pyplot()
+                      
+                  st.write("**Tweets WordCloud**")
+                  data_processed_text=Full_Data().clean_text(data_processed.statuses_text)
+
+                     
+                  st.set_option('deprecation.showPyplotGlobalUse',False)  
+                  text=" ".join(clean_text for clean_text in data_processed_text.clean_text)
+                  wordcloud = WordCloud(max_words=100).generate(text)
+
+# Display the generated image:
+                  plt.imshow(wordcloud, interpolation='bilinear')
+                  plt.axis("off")
+                  plt.title('Prevalent words in Tweets')
+                  plt.show()
+                  st.pyplot() 
+                  
+                  #cat_check=st.checkbox("Generate SA vs Global Bar Graph",value = False)
+                  #if cat_check:
+                        
 
 def main():
     
