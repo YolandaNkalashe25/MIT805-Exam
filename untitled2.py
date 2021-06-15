@@ -53,7 +53,7 @@ nltk.download('wordnet')
 from nltk.corpus import stopwords
 class Full_Data:
       # Data Pre-processing
-      @st.cache(suppress_st_warning=True)
+      
       def preprocess(self,data_heading):
         null_dict={}
         nulls_all=data_heading.isnull().sum().to_frame()
@@ -153,7 +153,7 @@ class Full_Data:
         return df_normal1.iloc[:,:5] #best_model_xgb
 
       #SA and Global Category Data cleaning
-      @st.cache(suppress_st_warning=True)
+      
       def CategoriseSA(self,Final_Dataset):
         Final_Dataset['statuses_text'] = Final_Dataset['statuses_text'].str.lower()
         Categorisation_dataset=Final_Dataset[(Final_Dataset['input_query']!='nfsas') & (Final_Dataset['input_query']!='#openthechurches')]
@@ -234,7 +234,6 @@ class Full_Data:
 
         return  Data_Models #best_model
     
-      @st.cache(suppress_st_warning=True)
       def clean_text(self,text):
         documents = []
         from nltk.stem import WordNetLemmatizer
@@ -267,7 +266,6 @@ class Full_Data:
 
 
       #Sentiment Analysis
-      @st.cache(suppress_st_warning=True)
       def Sent(self,Data_Models):
         from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
         analyser = SentimentIntensityAnalyzer()
@@ -299,7 +297,7 @@ class Full_Data:
         else: 
           return Df_sent["sentiment_class"].loc[0]
       
-      @st.cache(suppress_st_warning=True)
+
       def csv_downloader(self,data):
             dateTimeObj = datetime.now()
             timeStr = dateTimeObj.strftime("%H:%M:%S.%f")
@@ -310,7 +308,7 @@ class Full_Data:
             href = f'<a href="data:file/csv;base64,{b64}" download="{new_filename}">Click Here!!</a>'
             st.markdown(href,unsafe_allow_html=True)
             
-      @st.cache(suppress_st_warning=True)
+
       def main_full(self):
           import streamlit as st       
           # front end elements of the web page 
@@ -557,8 +555,7 @@ def preprocess_text(text):
                                 
 
 class SubSet_Data:
-      
-      @st.cache(suppress_st_warning=True)
+    
       def preprocess_text(self,text):
           # Tokenise words while ignoring punctuation
           tokeniser = RegexpTokenizer(r'\w+')
@@ -572,7 +569,7 @@ class SubSet_Data:
           keywords= [lemma for lemma in lemmas if lemma not in stopwords.words('english')]
           return keywords
       
-      @st.cache(suppress_st_warning=True)
+     
       def sub_df(self,data):
           data['statuses_retweeted_status_user_created_at'] =  pd.to_datetime(data['statuses_retweeted_status_user_created_at'])
           data['statuses_retweeted_status_user_created_at'] =  pd.to_datetime(data['statuses_retweeted_status_user_created_at'],format="%Y-%m-%d")
@@ -644,7 +641,7 @@ class SubSet_Data:
           
           return MicroblogText_df
           
-      @st.cache(suppress_st_warning=True)
+ 
       def Topic_num(self,corpus_df):
           corpus_df=corpus_df.to_list()
           Topic_ls=[]
@@ -690,7 +687,7 @@ class SubSet_Data:
           url = re.findall(regex,string)      
           return len(url)
 
-      @st.cache(suppress_st_warning=True)
+  
       def Sentiment_url(self,corpus_df):
           import vaderSentiment
           from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer   
@@ -747,7 +744,7 @@ class SubSet_Data:
 
 
 
-      @st.cache(suppress_st_warning=True)
+   
       def main_sub(self):
           
           
@@ -1225,7 +1222,7 @@ class SubSet_Data:
                        st.dataframe(pred_cat)
 class Dash:
       
-      @st.cache(suppress_st_warning=True)
+    
       def dash_full(self):
                 
                 def Bulk_data(data_load):
