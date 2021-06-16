@@ -248,7 +248,7 @@ def main():
                    
                   data=Bulk_data(Data_file)
 
-                  data_processed=data
+                  data_processed=preprocess(data)
                   
                   st.write(data_processed.head())
                   
@@ -309,15 +309,14 @@ def main():
                    st.pyplot(fig)   
                    
                    #import pickle
-# =============================================================================
-#                    def Cat_Model():
-#                             import joblib
-#                             pred_model = joblib.load('classifier_SACat.pkl.pkl')
-#                             return pred_model
-# =============================================================================
-                   #pickle_in = open("classifier_SACat.pkl.pkl", "rb") 
-                   #Cat_Model=pickle.load(pickle_in)   
-                   #clean_cat=CategoriseSA(data_processed)
+
+                   def Cat_Model():
+                             import joblib
+                             pred_model = joblib.load('classifier_SACat.pkl.pkl')
+                             return pred_model
+ 
+                   clean_cat=CategoriseSA(data_processed)
+                   st.write(clean_cat.statuses_without_stopwords)
       
                    #pred_model=Cat_Model() 
                    
