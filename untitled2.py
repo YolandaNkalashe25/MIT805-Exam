@@ -761,7 +761,7 @@ class SubSet_Data:
             if choice=='Bulk prediction':
                 Data_file=st.sidebar.file_uploader(label="Upload csv raw file", type=['xlsx'])
                 if Data_file is None:
-                    st.warning("One of your playlist URIs was not entered properly")
+                    st.warning("Please load data")
                     st.stop()
                 else:
                     
@@ -1243,23 +1243,25 @@ class Dash:
                   st.subheader("Visuals based on Trained data")
                    #Full_Data().main_full()
                    
-                  data=Bulk_data(Data_file)
+                  #data=Bulk_data(Data_file)
 
-                  data_processed=Full_Data().preprocess(data)
+                  #data_processed=Full_Data().preprocess(data)
 
                   #size=len(data_processed['statuses_retweeted_status_id'].unique())
                   #st.markdown('<p class="big-font">Count of unique tweets</p>', unsafe_allow_html=True)
                   #st.write(size)
                   
-                  st.write(data_processed.head())
+                  #st.write(data_processed.head())
+                  
+                  data=Bulk_data(Data_file)
 
-                  my_expander = st.beta_expander("Show Category and SA Catogory visual", expanded=True)
-                  with my_expander:
-                  #if st.checkbox('Show Category and SA Catogory visual'):    
- 
-                   st.subheader( "**Hash_Tags vs Topics Bar Graph**") 
-                   sns.set(rc={"figure.figsize":(10,5)})
-                   def hastag(row):
+                  data_processed=data
+                  
+                  st.write(data_processed.head())
+                  
+                  data_cat=pd.DataFrame(data_processed['input_query'])
+
+                  def hastag(row):
                       if(row['input_query']=='vaccine AND "South Africa"' or row['input_query']=='#vaccineSA' or row['input_query']=='#covidvaccine' or row['input_query']=='#VaccineforSouthAfrica' or row['input_query']=='#VaccineRolloutSA' or row['input_query']=='vaccine' ):
                         val="#T_Vaccine"
                       elif(row['input_query']=='"South Africa"' or row['input_query']=='#southafrica' or row['input_query']=='#SAlockdown'):  
@@ -1271,194 +1273,113 @@ class Dash:
         
                       return val
                    
-                   data_processed['input_query']=data_processed.apply(hastag,axis=1)
+                  data_cat['input_query']=data_processed.apply(hastag,axis=1)
+
+                  my_expander = st.beta_expander("Show Category and SA Catogory visual", expanded=True)
+                  with my_expander:
+                   st.subheader( "**Hash_Tags vs Topics Bar Graph**") 
+                   
                    
                    import matplotlib.pyplot as plt
                    
                    # PLotting category input query
-                   
+                   sns.set(rc={"figure.figsize":(10,5)})
                    fig= plt.figure()
-                   ax = sns.countplot(y="input_query", data=data_processed,order=data_processed['input_query'].value_counts().index)
+                   ax = sns.countplot(y="input_query", data=data_cat,order=data_cat['input_query'].value_counts().index)
                    plt.xticks(rotation=45)
-# =============================================================================
-#  
-#                    for p in ax.patches:
-#                          height = p.get_height() 
-#                          width = p.get_width() 
-#                          ax.text(x = width+3, 
-#                          y = p.get_y()+(height/2),
-#                          s = "{:.0f}".format(width), 
-#                          va = "center")
-# =============================================================================
-                   st.pyplot()   
+ 
+                   for p in ax.patches:
+                         height = p.get_height() 
+                         width = p.get_width() 
+                         ax.text(x = width+3, 
+                         y = p.get_y()+(height/2),
+                         s = "{:.0f}".format(width), 
+                         va = "center")
+
+                   st.pyplot(fig)    
                   
                    def Cat_Model():
-                            import joblib
-                            pred_model = joblib.load('classifier_SACat.pkl.pkl')
-                            return pred_model
-                        
+                             import joblib
+                             pred_model = joblib.load('classifier_SACat.pkl.pkl')
+                             return pred_model
+ 
                    clean_cat=Full_Data().CategoriseSA(data_processed)
-                   
+   
+      
                    pred_model=Cat_Model() 
                    
-                   st.write(pred_model)
-# =============================================================================
-#                    categorise=pred_model.predict(clean_cat.statuses_without_stopwords)
-#                    
-#                    categorise=categorise.tolist()
-#                    
-#                    df_class=pd.DataFrame(categorise,columns=["Class_Label"])
-#                    df_class=df_class.reset_index(drop=True)
-#                    
-#                    import numpy as np
-#                    
-#                    df_class['Tweet_Category'] = np.where((df_class['Class_Label'] ==0), 'Global Tweet', 'S.A Tweet')
-#        
-#                    df_cat=pd.concat([clean_cat,df_class],axis=1)
-#                    
-#                    
-# =============================================================================
+                   categorise=pred_model.predict(clean_cat['statuses_without_stopwords'])
+                   categorise=categorise.tolist()
+                    
+                   df_class=pd.DataFrame(categorise,columns=["Class_Label"])
+                   df_class=df_class.reset_index(drop=True)
+                    
+                   import numpy as np
+                    
+                   df_class['Tweet_Category'] = np.where((df_class['Class_Label'] ==0), 'Global Tweet', 'S.A Tweet')
+        
+                   df_cat=pd.concat([clean_cat,df_class],axis=1)
+
                    
-# =============================================================================
-#                    st.write('**SA vs Global Bar Graph**')
-#                    
-#                   
-#                    ax = sns.countplot(y="Tweet_Category", data=df_cat)
-# 
-#                    for p in ax.patches:
-#                              height = p.get_height() 
-#                              width = p.get_width() 
-#                              ax.text(x = width+3, 
-#                              y = p.get_y()+(height/2),
-#                              s = "{:.0f}".format(width), 
-#                              va = "center")
-#                    st.pyplot()
-# =============================================================================
+
+                   st.write('**SA vs Global Bar Graph**')
+                   fig1= plt.figure()
+                   ax = sns.countplot(y="Tweet_Category", data=df_cat)
+
+                   for p in ax.patches:
+                             height = p.get_height() 
+                             width = p.get_width() 
+                             ax.text(x = width+3, 
+                             y = p.get_y()+(height/2),
+                             s = "{:.0f}".format(width), 
+                             va = "center")
+                   st.pyplot(fig1)
                       
                 my_expander_Text = st.beta_expander("Show Text Analytics", expanded=True)
                 with my_expander_Text:
-                #if st.checkbox('Show Text Analytics'):   
-                  from wordcloud import WordCloud
-                  import matplotlib.pyplot as plt
-                  
-                  st.subheader("**Tweets WordCloud**")
-                  data_processed_text=Full_Data().clean_text(data_processed.statuses_text)
   
-                  st.set_option('deprecation.showPyplotGlobalUse',False)  
-                  text=" ".join(clean_text for clean_text in data_processed_text.clean_text)
-                  wordcloud = WordCloud(max_words=100).generate(text)
-
-                  # Display the generated image:
-                  plt.imshow(wordcloud, interpolation='bilinear')
-                  plt.axis("off")
-                  plt.title('Prevalent words in Tweets')
-                  plt.show()
-                  st.pyplot() 
-                  
-                  from PIL import Image
-                  st.subheader('Visual common words in each topic')
-                  st.write('The below visual shows the top salinent words in each topic. To have the interactive plot please click on link below visual')
-                  t_num=st.slider('Show most common words in each topic',max_value=3)
-                  if t_num==1:
-                      image = Image.open('Topic 2.jpg')
-                      st.image(image, caption='Topic 1 most used words')
-                  elif t_num==2:
-                      image = Image.open('Topic3.jpg')
-                      st.image(image, caption='Topic 2 most used words')
-                  elif t_num==3:
-                      image = Image.open('Topic1.jpg')
+                   from wordcloud import WordCloud
+                   import matplotlib.pyplot as plt
+                   
+                   st.subheader("**Tweets WordCloud**")
+                   data_processed_text=Full_Data().clean_text(data_processed.statuses_text)
+   
+                   st.set_option('deprecation.showPyplotGlobalUse',False)  
+                   text=" ".join(clean_text for clean_text in data_processed_text.clean_text)
+                   wordcloud = WordCloud(max_words=100).generate(text)
+ 
+#                   # Display the generated image:
+                   plt.imshow(wordcloud, interpolation='bilinear')
+                   plt.axis("off")
+                   plt.title('Prevalent words in Tweets')
+                   plt.show()
+                   st.pyplot() 
+                   
+                   from PIL import Image
+                   st.subheader('Visual common words in each topic')
+                   st.write('The below visual shows the top salinent words in each topic. To have the interactive plot please click on link below visual')
+                   t_num=st.slider('Show most common words in each topic',max_value=3)
+                   if t_num==1:
+                       image = Image.open('Topic 2.jpg')
+                       st.image(image, caption='Topic 1 most used words')
+                   elif t_num==2:
+                       image = Image.open('Topic3.jpg')
+                       st.image(image, caption='Topic 2 most used words')
+                   elif t_num==3:
+                       image = Image.open('Topic1.jpg')
+                       st.image(image, caption='Topic 3 most used words')
+                   else:
+                      image = Image.open('Topic0.jpg')
                       st.image(image, caption='Topic 3 most used words')
-                  else:
-                     image = Image.open('Topic0.jpg')
-                     st.image(image, caption='Topic 3 most used words')
-            
+             
+ 
+                   url = 'https://htmlpreview.github.io/?https://github.com/YolandaNkalashe25/COS802-Project/blob/main/output_lda.html'
+                   #vis=loads(vis)
+                   import webbrowser
+                   if st.button('Open browser'):
+                     webbrowser.open_new_tab(url)
 
-                  url = 'https://htmlpreview.github.io/?https://github.com/YolandaNkalashe25/MIT805-Exam/blob/main/output_lda.html'
-                  #vis=loads(vis)
-                  import webbrowser
-                  if st.button('Open browser'):
-                    webbrowser.open_new_tab(url)
-
-          
-# =============================================================================
-#                   import os
-#                   import base64
-#                   def get_binary_file_downloader_html(bin_file, file_label='File'):
-#                     with open(bin_file, 'rb') as f:
-#                      data = f.read()
-#                      bin_str = base64.b64encode(data).decode()
-#                      href = f'<a href="data:application/octet-stream;base64,{bin_str}" download="{os.path.basename(bin_file)}">Download {file_label}</a>'
-#                      return href
-#                  
-#     
-#                   st.markdown(get_binary_file_downloader_html(vis, 'Interactive Topic saliency plot'), unsafe_allow_html=True)
-#                   #cat_check=st.checkbox("Generate SA vs Global Bar Graph",value = False)
-#                   #if cat_check:
-# =============================================================================
                   
-                my_expander_Text_inter = st.beta_expander("Interactive Text Analytics", expanded=True)
-                with my_expander_Text_inter:  
-                #if st.checkbox('nteractive Text Analytics'): 
-                    
-                  st.subheader('Interactive Unsupervised Learning on Microblogs')
-                  import emoji
-                  from sklearn.cluster import KMeans
-                  from sklearn.cluster import MiniBatchKMeans
-                  from sklearn.decomposition import PCA
-                  from sklearn.manifold import TSNE
-                  
-                  def cluster(Document, n_clusters):
-                      vectorizer_tfidf = TfidfVectorizer(stop_words='english')
-                      vectorizer_tfidf.fit(Document)
-                      X_tfidf = vectorizer_tfidf.transform(Document)
-    
-                      tfidf_feature_names = vectorizer_tfidf.get_feature_names()
-    
-                      pca=PCA(n_components=2)
-                      X_pca=pca.fit_transform(X_tfidf.toarray())
-    
-                      clf=MiniBatchKMeans(n_clusters=n_clusters,compute_labels=True)
-                      clf.fit(X_tfidf)
-                      within_cluster=clf.inertia_
-    
-                      cluster_labels = clf.predict(X_tfidf)
-    
-                      return X_pca, cluster_labels
-                      
-                  num_clusters=st.slider('Number of unsupervised clusters',min_value=3, max_value=10,step=1)
-                  Document=data_processed.statuses_text
-                  X_pca, cluster_labels=cluster(Document,num_clusters)
-            
-                  import matplotlib.pyplot as plt
-                  import numpy as np
-                  
-                  fig = plt.figure()
-                  ax=fig.add_subplot(projection='3d')
-
-                  # Plot scatterplot data (20 2D points per colour) on the x and z axes.
-                  colors = ('r', 'g', 'b', 'k')
-
-                  # Fixing random state for reproducibility
-                  np.random.seed(19680801)
-
-                  x = X_pca[:,0]
-                  y = X_pca[:,1]
-                  
-                  scatter=ax.scatter(x, y, zs=0, zdir='y', c=cluster_labels, label='points in (x, z)')
-                  
-                  ax.legend()
-                  ax.set_xlabel('X')
-                  ax.set_ylabel('Y')
-                  ax.set_zlabel('Z')
-                  legend1 = ax.legend(*scatter.legend_elements(),
-                     loc="lower left")
-                  ax.add_artist(legend1)
-                  
-                  st.write(fig)
-              
-        
-
-                        
 
 def main():
     
