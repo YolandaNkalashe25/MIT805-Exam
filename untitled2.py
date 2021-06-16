@@ -1298,30 +1298,38 @@ class Dash:
                             return pred_model
                         
                    clean_cat=Full_Data().CategoriseSA(data_processed)
+                   
                    pred_model=Cat_Model() 
                    categorise=pred_model.predict(clean_cat.statuses_without_stopwords)
+                   
                    categorise=categorise.tolist()
+                   
                    df_class=pd.DataFrame(categorise,columns=["Class_Label"])
                    df_class=df_class.reset_index(drop=True)
                    
                    import numpy as np
                    
                    df_class['Tweet_Category'] = np.where((df_class['Class_Label'] ==0), 'Global Tweet', 'S.A Tweet')
+       
                    df_cat=pd.concat([clean_cat,df_class],axis=1)
-                   st.write('**SA vs Global Bar Graph**')
                    
+                   st.dataframe(df_class)
                    
-                   
-                   ax = sns.countplot(y="Tweet_Category", data=df_cat)
-
-                   for p in ax.patches:
-                             height = p.get_height() 
-                             width = p.get_width() 
-                             ax.text(x = width+3, 
-                             y = p.get_y()+(height/2),
-                             s = "{:.0f}".format(width), 
-                             va = "center")
-                   st.pyplot()
+# =============================================================================
+#                    st.write('**SA vs Global Bar Graph**')
+#                    
+#                   
+#                    ax = sns.countplot(y="Tweet_Category", data=df_cat)
+# 
+#                    for p in ax.patches:
+#                              height = p.get_height() 
+#                              width = p.get_width() 
+#                              ax.text(x = width+3, 
+#                              y = p.get_y()+(height/2),
+#                              s = "{:.0f}".format(width), 
+#                              va = "center")
+#                    st.pyplot()
+# =============================================================================
                       
                 my_expander_Text = st.beta_expander("Show Text Analytics", expanded=True)
                 with my_expander_Text:
