@@ -313,13 +313,13 @@ def main():
                             pred_model = joblib.load('classifier_SACat.pkl.pkl')
                             return pred_model
                         
-                   clean_cat=CategoriseSA(data_processed)
+                   #clean_cat=CategoriseSA(data_processed)
       
                    pred_model=Cat_Model() 
                    
-                   categorise=pred_model.predict(clean_cat.statuses_without_stopwords)
+                   #categorise=pred_model.predict(clean_cat.statuses_without_stopwords)
                    
-                   st.write(pred_model)  
+                   st.write(Cat_Model())  
 #                    categorise=categorise.tolist()
 #                    
 #                    df_class=pd.DataFrame(categorise,columns=["Class_Label"])
