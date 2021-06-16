@@ -1253,9 +1253,9 @@ class Dash:
                   
                   st.write(data_processed.head())
 
-                  #my_expander = st.beta_expander("Show Category and SA Catogory visual", expanded=True)
-                  #with my_expander:
-                  if st.checkbox('Show Category and SA Catogory visual'):    
+                  my_expander = st.beta_expander("Show Category and SA Catogory visual", expanded=True)
+                  with my_expander:
+                  #if st.checkbox('Show Category and SA Catogory visual'):    
  
                    st.subheader( "**Hash_Tags vs Topics Bar Graph**") 
                    sns.set(rc={"figure.figsize":(10,5)})
@@ -1275,15 +1275,21 @@ class Dash:
                    
                    import matplotlib.pyplot as plt
                    
-                   ax = sns.countplot(y="input_query", data=data_processed)
- 
-                   for p in ax.patches:
-                         height = p.get_height() 
-                         width = p.get_width() 
-                         ax.text(x = width+3, 
-                         y = p.get_y()+(height/2),
-                         s = "{:.0f}".format(width), 
-                         va = "center")
+                   # PLotting category input query
+                   
+                   fig= plt.figure()
+                   ax = sns.countplot(y="input_query", data=data_processed,order=data_processed['input_query'].value_counts().index)
+                   plt.xticks(rotation=45)
+# =============================================================================
+#  
+#                    for p in ax.patches:
+#                          height = p.get_height() 
+#                          width = p.get_width() 
+#                          ax.text(x = width+3, 
+#                          y = p.get_y()+(height/2),
+#                          s = "{:.0f}".format(width), 
+#                          va = "center")
+# =============================================================================
                    st.pyplot()   
                   
                    def Cat_Model():
@@ -1303,7 +1309,9 @@ class Dash:
                    df_class['Tweet_Category'] = np.where((df_class['Class_Label'] ==0), 'Global Tweet', 'S.A Tweet')
                    df_cat=pd.concat([clean_cat,df_class],axis=1)
                    st.write('**SA vs Global Bar Graph**')
-                          
+                   
+                   
+                   
                    ax = sns.countplot(y="Tweet_Category", data=df_cat)
 
                    for p in ax.patches:
@@ -1315,10 +1323,12 @@ class Dash:
                              va = "center")
                    st.pyplot()
                       
-                #my_expander_Text = st.beta_expander("Show Text Analytics", expanded=True)
-                #with my_expander_Text:
-                if st.checkbox('Show Text Analytics'):   
+                my_expander_Text = st.beta_expander("Show Text Analytics", expanded=True)
+                with my_expander_Text:
+                #if st.checkbox('Show Text Analytics'):   
                   from wordcloud import WordCloud
+                  import matplotlib.pyplot as plt
+                  
                   st.subheader("**Tweets WordCloud**")
                   data_processed_text=Full_Data().clean_text(data_processed.statuses_text)
   
@@ -1374,9 +1384,9 @@ class Dash:
 #                   #if cat_check:
 # =============================================================================
                   
-                #my_expander_Text_inter = st.beta_expander("Interactive Text Analytics", expanded=True)
-                #with my_expander_Text_inter:  
-                if st.checkbox('nteractive Text Analytics'): 
+                my_expander_Text_inter = st.beta_expander("Interactive Text Analytics", expanded=True)
+                with my_expander_Text_inter:  
+                #if st.checkbox('nteractive Text Analytics'): 
                     
                   st.subheader('Interactive Unsupervised Learning on Microblogs')
                   import emoji
