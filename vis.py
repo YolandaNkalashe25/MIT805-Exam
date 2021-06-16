@@ -319,7 +319,7 @@ def main():
                    
                    categorise=pred_model.predict(clean_cat.statuses_without_stopwords)
                    
-                   st.write(clean_cat['statuses_without_stopwords'])  
+                   st.write(pred_model)  
 #                    categorise=categorise.tolist()
 #                    
 #                    df_class=pd.DataFrame(categorise,columns=["Class_Label"])
