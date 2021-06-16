@@ -1236,11 +1236,15 @@ class Dash:
                 #url="https://github.com/AndaniMadodonga/Test/blob/main/Tweetdatatest%20-%20Copy.xlsx?raw=true"
                 
                 Data_file = pd.read_excel(url)
-                
+                html_temp1 = """ 
+                           <div style ="background-color:yellow;padding:13px"> 
+                          <h1 style ="color:black;text-align:Center;;">Visualization/Dashboard based on Trained data</h1> 
+                          </div> 
+                           """
                 if Data_file is None:
                    st.write("Check the data reference link ")
                 else:
-                  st.subheader("Visuals based on Trained data")
+                  st.markdown(html_temp1, unsafe_allow_html=True)
                    #Full_Data().main_full()
                    
                   #data=Bulk_data(Data_file)
