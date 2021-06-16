@@ -308,22 +308,22 @@ def main():
 # =============================================================================
                    st.pyplot(fig)   
                    
-                   import pickle
+                   #import pickle
 # =============================================================================
 #                    def Cat_Model():
 #                             import joblib
 #                             pred_model = joblib.load('classifier_SACat.pkl.pkl')
 #                             return pred_model
 # =============================================================================
-                   pickle_in = open("classifier_SACat.pkl.pkl", "rb") 
-                   Cat_Model=pickle.load(pickle_in)   
-                   clean_cat=CategoriseSA(data_processed)
+                   #pickle_in = open("classifier_SACat.pkl.pkl", "rb") 
+                   #Cat_Model=pickle.load(pickle_in)   
+                   #clean_cat=CategoriseSA(data_processed)
       
                    #pred_model=Cat_Model() 
                    
-                   categorise=Cat_Model.predict(clean_cat.statuses_without_stopwords)
+                   #categorise=Cat_Model.predict(clean_cat.statuses_without_stopwords)
                    
-                   st.write(categorise)  
+                   #st.write(categorise)  
 #                    categorise=categorise.tolist()
 #                    
 #                    df_class=pd.DataFrame(categorise,columns=["Class_Label"])
