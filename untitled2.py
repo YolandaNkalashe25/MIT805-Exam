@@ -936,7 +936,7 @@ class SubSet_Data:
                 
                     if radi_distribu=='Topic3':
                        st.subheader("Topic3 Distrubtion plot")
-                       st.altair_chart(line_chart2,use_container_width=True)    
+                       st.altair_chart(line_chart3,use_container_width=True)    
                        
                     st.subheader('Get probability of retweet count based on topic.')
                     
