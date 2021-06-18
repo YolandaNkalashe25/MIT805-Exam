@@ -1392,7 +1392,7 @@ def main():
   choice=st.sidebar.selectbox("Select Page to view", pick)
   st.subheader("Covid19za Consortium App ")
   st.write("This app is categorized in two sections")
-  st.write("1. Visualization/ Dashboard section where we display some of the key visuals of the data used)
+  st.write("1. Visualization/ Dashboard section where we display some of the key visuals of the data used")
   st.write("2. Prediciton where models can be used to predict based on user inserted")
   st.markdown("** Please select on the sidebar the portion of the app you want to use**")
            
